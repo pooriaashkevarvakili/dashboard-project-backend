@@ -1,16 +1,25 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
-import { Logger } from 'nestjs-pino';
+import {
+  ValidationPipe,
+  Logger,
+} from '@nestjs/common';
+import { Logger as PinoLogger } from 'nestjs-pino';
+import {
+  SwaggerModule,
+  DocumentBuilder,
+} from '@nestjs/swagger';
 import helmet from 'helmet';
 
 async function bootstrap() {
   try {
-    console.log('1. Bootstrap started');
+    Logger.log('========== BOOTSTRAP START ==========', 'Bootstrap');
 
-    const app = await NestFactory.create(AppModule);
-    console.log('2. Nest application created');
+    const app = await NestFactory.create(AppModule, {
+      bufferLogs: true,
+    });
+
+    app.useLogger(app.get(PinoLogger));
 
     app.use(helmet());
 
@@ -21,45 +30,49 @@ async function bootstrap() {
       }),
     );
 
-    app.useLogger(app.get(Logger));
-
     app.enableCors({
-      origin: ['http://localhost:5173'],
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      origin: true,
       credentials: true,
     });
 
-    const config = new DocumentBuilder()
-      .setTitle('My API')
-      .setDescription('Swagger API docs')
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('Dashboard API')
+      .setDescription('Dashboard Backend API')
       .setVersion('1.0')
       .addBearerAuth()
       .build();
 
-    const document = SwaggerModule.createDocument(app, config);
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
 
-    // نمایش تمام Routeهای ثبت شده
-    console.log('========== ROUTES ==========');
-    console.log(Object.keys(document.paths));
-    console.log('============================');
+    console.log('\n========== REGISTERED ROUTES ==========');
 
-    SwaggerModule.setup('doshboard-api-swagger', app, document, {
-      explorer: true,
-      swaggerOptions: {
-        persistAuthorization: true,
+    const routes = Object.keys(document.paths);
+
+    if (routes.length === 0) {
+      console.log('NO ROUTES FOUND');
+    } else {
+      routes.forEach((r) => console.log(r));
+    }
+
+    console.log('=======================================\n');
+
+    SwaggerModule.setup(
+      'doshboard-api-swagger',
+      app,
+      document,
+      {
+        jsonDocumentUrl: 'doshboard-api-swagger-json',
       },
-    });
+    );
 
     const port = Number(process.env.PORT) || 8000;
 
-    console.log(`3. Listening on port ${port}`);
-
     await app.listen(port, '0.0.0.0');
 
-    console.log(`✅ Server started on port ${port}`);
-  } catch (error) {
-    console.error('❌ Bootstrap Error');
-    console.error(error);
+    Logger.log(`Listening on ${port}`, 'Bootstrap');
+    Logger.log('========== BOOTSTRAP SUCCESS ==========', 'Bootstrap');
+  } catch (err) {
+    console.error(err);
   }
 }
 
