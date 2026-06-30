@@ -76,69 +76,64 @@ export class AuthService {
   }
 
   // ================= SIGNIN =================
-  async signin(signinDto: SiginninDto) {
-    try {
-      console.log('========== SIGNIN START ==========');
-      console.log('DTO:', signinDto);
+async signin(signinDto: SiginninDto) {
+  try {
 
-      const { email, password } = signinDto;
+    const { email, password } = signinDto;
 
-      const user = await this.userRepository.findOne({
-        where: { email },
-      });
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
 
-      if (!user) {
-        throw new UnauthorizedException('Invalid email or password');
-      }
-
-      const isMatch = await this.hashingService.compare(
-        password,
-        user.password,
-      );
-
-      if (!isMatch) {
-        throw new UnauthorizedException('Invalid email or password');
-      }
-
-      const payload = {
-        sub: user.id,
-        email: user.email,
-      };
-
-      const accessToken = await this.jwtService.signAsync(payload, {
-        secret: this.jwtConfiguration.secret,
-        issuer: this.jwtConfiguration.issuer,
-        audience: this.jwtConfiguration.audience,
-        expiresIn: '15m',
-      });
-
-      const refreshToken = await this.jwtService.signAsync(payload, {
-        secret: this.jwtConfiguration.refreshSecret, // ✅ FIXED
-        issuer: this.jwtConfiguration.issuer,
-        audience: this.jwtConfiguration.audience,
-        expiresIn: '3d',
-      });
-
-      console.log('========== SIGNIN SUCCESS ==========');
-
-      return {
-        accessToken,
-        refreshToken,
-        user: {
-          id: user.id,
-          email: user.email,
-          username: user.username,
-        },
-      };
-    } catch (error) {
-      console.error('========== SIGNIN ERROR ==========');
-      console.error(error);
-
-      if (error instanceof UnauthorizedException) {
-        throw error;
-      }
-
-      throw new InternalServerErrorException('Signin failed');
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
     }
+
+    const isMatch = await this.hashingService.compare(
+      password,
+      user.password,
+    );
+
+    if (!isMatch) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const payload = {
+      sub: user.id,
+      email: user.email,
+    };
+
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: 'super_secret_key_change_this_please',
+      issuer: 'localhost:3000',
+      audience: 'localhost:3000',
+      expiresIn: '15m',
+    });
+
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: 'super_refresh_secret_key_change_this',
+      issuer: 'localhost:3000',
+      audience: 'localhost:3000',
+      expiresIn: '3d',
+    });
+
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+
+    if (error instanceof UnauthorizedException) {
+      throw error;
+    }
+
+    throw new InternalServerErrorException('Signin failed');
   }
+}
 }
