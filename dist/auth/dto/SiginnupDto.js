@@ -39,4 +39,12 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], SiginnupDto.prototype, "password", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'User email address',
+        example: 'pooria05',
+        required: true
+    }),
+    __metadata("design:type", String)
+], SiginnupDto.prototype, "username", void 0);
 //# sourceMappingURL=SiginnupDto.js.map

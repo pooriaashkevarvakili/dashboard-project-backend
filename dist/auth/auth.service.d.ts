@@ -1,12 +1,11 @@
-import { SiginnupDto } from './dto/SiginnupDto';
-import { ConfigType as ConfigTypeOriginal } from '@nestjs/config';
 import { Repository } from 'typeorm';
-import { SiginninDto } from './dto/signin.dto';
-import { Auth } from './entities/auth.entity';
 import { JwtService } from '@nestjs/jwt';
-import jwtConfig from './config/jwt.config';
+import type { ConfigType } from '@nestjs/config';
+import { Auth } from './entities/auth.entity';
+import { SiginnupDto } from './dto/SiginnupDto';
+import { SiginninDto } from './dto/signin.dto';
 import { Hashingservice } from './hashingService/hashingservice.service';
-type ConfigType<T extends (...args: any) => any> = ConfigTypeOriginal<T>;
+import jwtConfig from './config/jwt.config';
 export declare class AuthService {
     private readonly userRepository;
     private readonly hashingService;
@@ -15,10 +14,15 @@ export declare class AuthService {
     constructor(userRepository: Repository<Auth>, hashingService: Hashingservice, jwtService: JwtService, jwtConfiguration: ConfigType<typeof jwtConfig>);
     signup(signupDto: SiginnupDto): Promise<{
         message: string;
-        email: string;
+        user: {
+            id: number;
+            email: string;
+            username: string;
+        };
     }>;
     signin(signinDto: SiginninDto): Promise<{
         accessToken: string;
+        refreshToken: string;
         user: {
             id: number;
             email: string;
@@ -26,4 +30,3 @@ export declare class AuthService {
         };
     }>;
 }
-export {};

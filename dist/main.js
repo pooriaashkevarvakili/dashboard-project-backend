@@ -34,13 +34,6 @@ async function bootstrap() {
     });
     const port = Number(process.env.PORT) || 8000;
     await app.listen(port, '0.0.0.0');
-    console.log('===================================');
-    console.log('Server:', `http://0.0.0.0:${port}`);
-    console.log('Swagger:', `http://0.0.0.0:${port}/doshboard-api-swagger`);
-    console.log('Swagger Paths:');
-    console.log(Object.keys(document.paths));
-    console.log(JSON.stringify(document.paths, null, 2));
-    console.log('===================================');
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

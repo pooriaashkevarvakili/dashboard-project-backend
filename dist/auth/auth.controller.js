@@ -28,13 +28,39 @@ let AuthController = class AuthController {
         return this.authService.signup(signupDto);
     }
     async signin(response, signinDto) {
-        const result = await this.authService.signin(signinDto);
-        response.cookie('accessToken', result.accessToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-        });
-        return result;
+        try {
+            console.log('========== CONTROLLER ==========');
+            console.log('Request Body:', signinDto);
+            console.log('Step 1: Calling AuthService.signin()');
+            const result = await this.authService.signin(signinDto);
+            console.log('Step 2: Service Success');
+            console.log(result);
+            console.log('Step 3: Setting Access Token Cookie');
+            response.cookie('accessToken', result.accessToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                maxAge: 15 * 60 * 1000,
+            });
+            console.log('Access Cookie OK');
+            console.log('Step 4: Setting Refresh Token Cookie');
+            response.cookie('refreshToken', result.refreshToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                maxAge: 3 * 24 * 60 * 60 * 1000,
+            });
+            console.log('Refresh Cookie OK');
+            console.log('========== END ==========');
+            return {
+                accessToken: result.accessToken,
+            };
+        }
+        catch (error) {
+            console.error('========== CONTROLLER ERROR ==========');
+            console.error(error);
+            throw error;
+        }
     }
 };
 exports.AuthController = AuthController;

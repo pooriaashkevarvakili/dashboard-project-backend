@@ -11,20 +11,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthModule = void 0;
 const common_1 = require("@nestjs/common");
-const auth_service_1 = require("./auth.service");
-const auth_controller_1 = require("./auth.controller");
 const typeorm_1 = require("@nestjs/typeorm");
-const auth_decortor_1 = require("./decorator/auth.decortor");
-const hashingservice_service_1 = require("./hashingService/hashingservice.service");
-const jwt_config_1 = __importDefault(require("./config/jwt.config"));
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
+const auth_service_1 = require("./auth.service");
+const auth_controller_1 = require("./auth.controller");
+const auth_entity_1 = require("./entities/auth.entity");
+const hashingservice_service_1 = require("./hashingService/hashingservice.service");
+const jwt_config_1 = __importDefault(require("./config/jwt.config"));
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([auth_decortor_1.Auth]), jwt_1.JwtModule.registerAsync(jwt_config_1.default.asProvider()), config_1.ConfigModule.forFeature(jwt_config_1.default)],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([auth_entity_1.Auth]),
+            jwt_1.JwtModule.registerAsync(jwt_config_1.default.asProvider()),
+            config_1.ConfigModule.forFeature(jwt_config_1.default),
+        ],
         controllers: [auth_controller_1.AuthController],
         providers: [auth_service_1.AuthService, hashingservice_service_1.Hashingservice],
     })

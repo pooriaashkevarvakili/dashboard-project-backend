@@ -7,14 +7,13 @@ export declare class AuthController {
     constructor(authService: AuthService);
     signup(signupDto: SiginnupDto): Promise<{
         message: string;
-        email: string;
-    }>;
-    signin(response: Response, signinDto: SiginninDto): Promise<{
-        accessToken: string;
         user: {
             id: number;
             email: string;
             username: string;
         };
+    }>;
+    signin(response: Response, signinDto: SiginninDto): Promise<{
+        accessToken: string;
     }>;
 }

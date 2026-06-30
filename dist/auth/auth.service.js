@@ -19,10 +19,10 @@ exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const auth_entity_1 = require("./entities/auth.entity");
 const jwt_1 = require("@nestjs/jwt");
-const jwt_config_1 = __importDefault(require("./config/jwt.config"));
+const auth_entity_1 = require("./entities/auth.entity");
 const hashingservice_service_1 = require("./hashingService/hashingservice.service");
+const jwt_config_1 = __importDefault(require("./config/jwt.config"));
 let AuthService = class AuthService {
     userRepository;
     hashingService;
@@ -35,52 +35,103 @@ let AuthService = class AuthService {
         this.jwtConfiguration = jwtConfiguration;
     }
     async signup(signupDto) {
-        if (!signupDto.email || !signupDto.username || !signupDto.password) {
-            throw new common_1.BadRequestException('ایمیل، نام کاربری و رمز عبور الزامی هستند');
+        try {
+            const { email, username, password } = signupDto;
+            if (!email || !username || !password) {
+                throw new common_1.BadRequestException('Email, username and password are required');
+            }
+            const existingUser = await this.userRepository.findOne({
+                where: [{ email }, { username }],
+            });
+            if (existingUser) {
+                throw new common_1.ConflictException('User with this email or username already exists');
+            }
+            const hashedPassword = await this.hashingService.hash(password);
+            const user = this.userRepository.create({
+                email,
+                username,
+                password: hashedPassword,
+            });
+            await this.userRepository.save(user);
+            return {
+                message: 'User created successfully',
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    username: user.username,
+                },
+            };
         }
-        const existingUser = await this.userRepository.findOne({
-            where: [
-                { email: signupDto.email },
-                { username: signupDto.username },
-            ],
-        });
-        if (existingUser) {
-            throw new common_1.ConflictException('کاربری با این ایمیل یا نام کاربری وجود دارد');
+        catch (error) {
+            console.error('Signup Error:', error);
+            if (error instanceof common_1.BadRequestException ||
+                error instanceof common_1.ConflictException) {
+                throw error;
+            }
+            throw new common_1.InternalServerErrorException(error.message);
         }
-        const hashedPassword = await this.hashingService.hash(signupDto.password);
-        const user = new auth_entity_1.Auth();
-        user.email = signupDto.email;
-        user.username = signupDto.username;
-        user.password = hashedPassword;
-        await this.userRepository.save(user);
-        return {
-            message: 'User created successfully',
-            email: user.email,
-        };
     }
     async signin(signinDto) {
-        if (!signinDto.email || !signinDto.password) {
-            throw new common_1.BadRequestException('Email and password are required');
+        try {
+            console.log('========== SIGNIN START ==========');
+            console.log('DTO:', signinDto);
+            const { email, password } = signinDto;
+            if (!email || !password) {
+                throw new common_1.BadRequestException('Email and password are required');
+            }
+            console.log('Step 1: Finding user...');
+            const user = await this.userRepository.findOne({
+                where: { email },
+            });
+            console.log('User:', user);
+            if (!user) {
+                throw new common_1.UnauthorizedException('Invalid email or password');
+            }
+            console.log('Step 2: Comparing password...');
+            const isMatch = await this.hashingService.compare(password, user.password);
+            console.log('Password Match:', isMatch);
+            if (!isMatch) {
+                throw new common_1.UnauthorizedException('Invalid email or password');
+            }
+            const payload = {
+                sub: user.id,
+                email: user.email,
+            };
+            console.log('Step 3: Payload:', payload);
+            console.log('JWT Config:', this.jwtConfiguration);
+            console.log('JWT_REFRESH_SECRET:', process.env.JWT_REFRESH_SECRET);
+            console.log('Step 4: Creating Access Token...');
+            const accessToken = await this.jwtService.signAsync(payload, {
+                secret: this.jwtConfiguration.secret,
+                issuer: this.jwtConfiguration.issuer,
+                audience: this.jwtConfiguration.audience,
+                expiresIn: '15m',
+            });
+            console.log('Access Token Created');
+            console.log('Step 5: Creating Refresh Token...');
+            const refreshToken = await this.jwtService.signAsync(payload, {
+                secret: process.env.JWT_REFRESH_SECRET,
+                issuer: this.jwtConfiguration.issuer,
+                audience: this.jwtConfiguration.audience,
+                expiresIn: '3d',
+            });
+            console.log('Refresh Token Created');
+            console.log('========== SIGNIN SUCCESS ==========');
+            return {
+                accessToken,
+                refreshToken,
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    username: user.username,
+                },
+            };
         }
-        const user = await this.userRepository.findOneBy({ email: signinDto.email });
-        if (!user) {
-            throw new common_1.UnauthorizedException('Invalid email or password');
+        catch (error) {
+            console.error('========== SIGNIN ERROR ==========');
+            console.error(error);
+            throw error;
         }
-        const isEqual = await this.hashingService.compare(signinDto.password, user.password);
-        if (!isEqual) {
-            throw new common_1.UnauthorizedException('Invalid email or password');
-        }
-        const accessToken = await this.jwtService.signAsync({
-            sub: user.id,
-            email: user.email,
-        }, {
-            audience: this.jwtConfiguration.audience,
-            issuer: this.jwtConfiguration.tokenissuser,
-            secret: this.jwtConfiguration.secret,
-            expiresIn: this.jwtConfiguration.accesstokenttl,
-        });
-        const { password, ...userWithoutPassword } = user;
-        return { accessToken, user: userWithoutPassword };
     }
 };
 exports.AuthService = AuthService;
