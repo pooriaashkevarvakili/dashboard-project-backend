@@ -9,17 +9,18 @@ async function bootstrap() {
 
   app.use(helmet());
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-    }),
-  );
-
   app.enableCors({
     origin: true,
     credentials: true,
   });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
 
   const config = new DocumentBuilder()
     .setTitle('Dashboard API')
@@ -36,7 +37,7 @@ async function bootstrap() {
 
   await app.listen(port, '0.0.0.0');
 
-  Logger.log(`Server is running on port ${port}`);
+  Logger.log(`Server running on port ${port}`);
 }
 
 bootstrap();
