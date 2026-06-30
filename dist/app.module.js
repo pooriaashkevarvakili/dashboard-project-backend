@@ -43,10 +43,8 @@ exports.AppModule = AppModule = __decorate([
                     autoLoadEntities: true,
                     synchronize: true,
                     logging: true,
-                    ssl: config.get('NODE_ENV') === 'production'
-                        ? {
-                            rejectUnauthorized: false,
-                        }
+                    ssl: config.get('DB_SSL') === 'true'
+                        ? { rejectUnauthorized: false }
                         : false,
                 }),
             }),

@@ -35,12 +35,10 @@ import jwtConfig from './auth/config/jwt.config';
         synchronize: true,
         logging: true,
 
-        ssl:
-          config.get('NODE_ENV') === 'production'
-            ? {
-                rejectUnauthorized: false,
-              }
-            : false,
+        // ✅ FIX: safe SSL config
+        ssl: config.get('DB_SSL') === 'true'
+          ? { rejectUnauthorized: false }
+          : false,
       }),
     }),
 
