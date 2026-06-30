@@ -6,43 +6,61 @@ import { Logger } from 'nestjs-pino';
 import helmet from 'helmet';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  try {
+    console.log('1. Bootstrap started');
 
-  app.use(helmet());
+    const app = await NestFactory.create(AppModule);
+    console.log('2. Nest application created');
 
-  app.useGlobalPipes(new ValidationPipe());
+    app.use(helmet());
 
-  app.useLogger(app.get(Logger));
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        transform: true,
+      }),
+    );
 
-  app.enableCors({
-    origin: ['http://localhost:5173'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    credentials: true,
-  });
+    app.useLogger(app.get(Logger));
 
-  const config = new DocumentBuilder()
-    .setTitle('My API')
-    .setDescription('Swagger API docs')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
+    app.enableCors({
+      origin: ['http://localhost:5173'],
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      credentials: true,
+    });
 
-  const document = SwaggerModule.createDocument(app, config);
+    const config = new DocumentBuilder()
+      .setTitle('My API')
+      .setDescription('Swagger API docs')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
 
-  SwaggerModule.setup('doshboard-api-swagger', app, document, {
-    explorer: true,
-    swaggerOptions: {
-      persistAuthorization: true,
-    },
-  });
+    const document = SwaggerModule.createDocument(app, config);
 
-  const port = Number(process.env.PORT) || 8000;
+    // نمایش تمام Routeهای ثبت شده
+    console.log('========== ROUTES ==========');
+    console.log(Object.keys(document.paths));
+    console.log('============================');
 
-  await app.listen(port, '0.0.0.0');
+    SwaggerModule.setup('doshboard-api-swagger', app, document, {
+      explorer: true,
+      swaggerOptions: {
+        persistAuthorization: true,
+      },
+    });
 
+    const port = Number(process.env.PORT) || 8000;
 
-  
+    console.log(`3. Listening on port ${port}`);
 
+    await app.listen(port, '0.0.0.0');
+
+    console.log(`✅ Server started on port ${port}`);
+  } catch (error) {
+    console.error('❌ Bootstrap Error');
+    console.error(error);
+  }
 }
 
 bootstrap();

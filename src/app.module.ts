@@ -12,52 +12,58 @@ import jwtConfig from './auth/config/jwt.config';
 
 @Module({
   imports: [
-    // Config
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
 
-    // JWT
     JwtModule.registerAsync(jwtConfig.asProvider()),
 
-    // DB
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
         type: 'postgres',
+
         host: config.get<string>('DB_HOST'),
         port: Number(config.get<string>('DB_PORT')),
         username: config.get<string>('DB_USER'),
         password: config.get<string>('DB_PASS'),
         database: config.get<string>('DB_NAME'),
+
         autoLoadEntities: true,
         synchronize: true,
-        logging: false,
+        logging: true,
+
+        ssl:
+          config.get('NODE_ENV') === 'production'
+            ? {
+                rejectUnauthorized: false,
+              }
+            : false,
       }),
     }),
 
-    // Logger
     LoggerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const isProduction = configService.get('NODE_ENV') === 'production';
-
-        return {
-          pinoHttp: {
-            transport: isProduction
+      useFactory: (configService: ConfigService) => ({
+        pinoHttp: {
+          transport:
+            configService.get('NODE_ENV') === 'production'
               ? undefined
               : {
                   target: 'pino-pretty',
-                  options: { singleLine: true },
+                  options: {
+                    singleLine: true,
+                  },
                 },
-            level: isProduction ? 'info' : 'debug',
-          },
-        };
-      },
+          level:
+            configService.get('NODE_ENV') === 'production'
+              ? 'info'
+              : 'debug',
+        },
+      }),
     }),
 
     AuthModule,

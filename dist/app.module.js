@@ -42,26 +42,32 @@ exports.AppModule = AppModule = __decorate([
                     database: config.get('DB_NAME'),
                     autoLoadEntities: true,
                     synchronize: true,
-                    logging: false,
+                    logging: true,
+                    ssl: config.get('NODE_ENV') === 'production'
+                        ? {
+                            rejectUnauthorized: false,
+                        }
+                        : false,
                 }),
             }),
             nestjs_pino_1.LoggerModule.forRootAsync({
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
-                useFactory: (configService) => {
-                    const isProduction = configService.get('NODE_ENV') === 'production';
-                    return {
-                        pinoHttp: {
-                            transport: isProduction
-                                ? undefined
-                                : {
-                                    target: 'pino-pretty',
-                                    options: { singleLine: true },
+                useFactory: (configService) => ({
+                    pinoHttp: {
+                        transport: configService.get('NODE_ENV') === 'production'
+                            ? undefined
+                            : {
+                                target: 'pino-pretty',
+                                options: {
+                                    singleLine: true,
                                 },
-                            level: isProduction ? 'info' : 'debug',
-                        },
-                    };
-                },
+                            },
+                        level: configService.get('NODE_ENV') === 'production'
+                            ? 'info'
+                            : 'debug',
+                    },
+                }),
             }),
             auth_module_1.AuthModule,
         ],
