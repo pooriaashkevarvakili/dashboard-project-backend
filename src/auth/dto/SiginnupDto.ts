@@ -22,5 +22,10 @@ export class SiginnupDto {
   @MinLength(10)
   @IsNotEmpty()
   password!: string;
+  @ApiProperty({ 
+    description: 'User email address', 
+    example: 'pooria05',
+    required: true 
+  })
   username!:string
 }
