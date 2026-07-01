@@ -10,7 +10,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import type { ConfigType } from '@nestjs/config';
-
 import { Auth } from './entities/auth.entity';
 import { SiginnupDto } from './dto/SiginnupDto';
 import { SiginninDto } from './dto/signin.dto';
@@ -31,10 +30,15 @@ export class AuthService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
 
-  // ================= SIGNUP =================
   async signup(signupDto: SiginnupDto) {
     try {
       const { email, username, password } = signupDto;
+
+      if (!email || !username || !password) {
+        throw new BadRequestException(
+          'Email, username and password are required',
+        );
+      }
 
       const existingUser = await this.userRepository.findOne({
         where: [{ email }, { username }],
@@ -64,35 +68,50 @@ export class AuthService {
           username: user.username,
         },
       };
-    } catch (error: any) {
+    } catch (error:any) {
       console.error('Signup Error:', error);
 
-      if (error instanceof ConflictException) {
+      if (
+        error instanceof BadRequestException ||
+        error instanceof ConflictException
+      ) {
         throw error;
       }
 
-      throw new InternalServerErrorException('Signup failed');
+      throw new InternalServerErrorException(error.message);
     }
   }
-
-  // ================= SIGNIN =================
 async signin(signinDto: SiginninDto) {
   try {
+    console.log('========== SIGNIN START ==========');
+    console.log('DTO:', signinDto);
 
     const { email, password } = signinDto;
+
+    if (!email || !password) {
+      throw new BadRequestException('Email and password are required');
+    }
+
+    console.log('Step 1: Finding user...');
 
     const user = await this.userRepository.findOne({
       where: { email },
     });
 
+    console.log('User:', user);
+
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
     }
+
+    console.log('Step 2: Comparing password...');
 
     const isMatch = await this.hashingService.compare(
       password,
       user.password,
     );
+
+    console.log('Password Match:', isMatch);
 
     if (!isMatch) {
       throw new UnauthorizedException('Invalid email or password');
@@ -103,19 +122,37 @@ async signin(signinDto: SiginninDto) {
       email: user.email,
     };
 
+    console.log('Step 3: Payload:', payload);
+
+    console.log('JWT Config:', this.jwtConfiguration);
+    console.log(
+      'JWT_REFRESH_SECRET:',
+      process.env.JWT_REFRESH_SECRET,
+    );
+
+    console.log('Step 4: Creating Access Token...');
+
     const accessToken = await this.jwtService.signAsync(payload, {
-      secret: 'super_secret_key_change_this_please',
-      issuer: 'localhost:3000',
-      audience: 'localhost:3000',
+      secret: this.jwtConfiguration.secret,
+      issuer: this.jwtConfiguration.issuer,
+      audience: this.jwtConfiguration.audience,
       expiresIn: '15m',
     });
 
+    console.log('Access Token Created');
+
+    console.log('Step 5: Creating Refresh Token...');
+
     const refreshToken = await this.jwtService.signAsync(payload, {
-      secret: 'super_refresh_secret_key_change_this',
-      issuer: 'localhost:3000',
-      audience: 'localhost:3000',
+      secret: process.env.JWT_REFRESH_SECRET,
+      issuer: this.jwtConfiguration.issuer,
+      audience: this.jwtConfiguration.audience,
       expiresIn: '3d',
     });
+
+    console.log('Refresh Token Created');
+
+    console.log('========== SIGNIN SUCCESS ==========');
 
     return {
       accessToken,
@@ -127,13 +164,9 @@ async signin(signinDto: SiginninDto) {
       },
     };
   } catch (error) {
+    console.error('========== SIGNIN ERROR ==========');
     console.error(error);
-
-    if (error instanceof UnauthorizedException) {
-      throw error;
-    }
-
-    throw new InternalServerErrorException('Signin failed');
+    throw error;
   }
 }
 }

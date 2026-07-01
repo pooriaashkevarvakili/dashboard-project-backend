@@ -1,46 +1,51 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe, Logger } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
+import { Logger } from 'nestjs-pino';
 import helmet from 'helmet';
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+import { join } from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
-  // Security middleware
+async function bootstrap() {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
   app.use(helmet());
 
-  // CORS
+  app.useGlobalPipes(new ValidationPipe());
+
+  app.useLogger(app.get(Logger));
+
   app.enableCors({
-    origin: true,
+    origin: ['http://localhost:5173'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
   });
 
-  // Validation
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      forbidNonWhitelisted: true,
-    }),
-  );
-
-  // Swagger
   const config = new DocumentBuilder()
-    .setTitle('Dashboard API')
-    .setDescription('Dashboard Backend API')
+    .setTitle('project Dashboard backend')
+    .setDescription('Swagger API docs')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
+app.setGlobalPrefix('api/v1');
+  app.useStaticAssets(join(__dirname, '..', 'public'));
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('dashboard-api-swagger', app, document);
+  SwaggerModule.setup('doshboard-api-swagger', app, document, {
+    explorer: true,
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 
-  // IMPORTANT for Runflare / cloud platforms
-  const port = process.env.PORT ? Number(process.env.PORT) : 8000;
+  const port = Number(process.env.PORT) || 8000;
 
   await app.listen(port, '0.0.0.0');
 
-  Logger.log(`Server running on port ${port}`);
+
+  
+
 }
 
-bootstrap();// force redeploy
+bootstrap();

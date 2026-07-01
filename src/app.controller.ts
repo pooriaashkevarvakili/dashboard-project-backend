@@ -1,21 +1,19 @@
-import { Controller, Get } from '@nestjs/common';
-
+import { Controller, Get,Res } from '@nestjs/common';
+import { AppService } from './app.service';
+import { join } from 'path';
+import type { Response } from 'express';
 @Controller()
 export class AppController {
-  @Get()
-  root() {
-    return {
-      app: 'Dashboard Backend',
-      version: 'RUNFLARE-TEST-999',
-      status: 'OK',
-    };
-  }
+  constructor(private readonly appService: AppService) {}
 
-  @Get('test123')
-  test() {
-    return {
-      ok: true,
-      message: 'NestJS is running',
-    };
+  @Get()
+  getHello(): string {
+    return this.appService.getHello();
+  }
+    @Get('image/codekhane')
+  getImage(@Res() res: Response) {
+    return res.sendFile(
+      join(process.cwd(), 'public', 'codekhane.jpeg'),
+    );
   }
 }

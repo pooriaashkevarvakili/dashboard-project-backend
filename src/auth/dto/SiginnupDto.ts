@@ -1,32 +1,31 @@
+// src/iam/authcation/dto/signup.dto/signup.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, MinLength, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, MinLength, IsNotEmpty } from 'class-validator';
 
-export class SiginnupDto {
-  @ApiProperty({
-    description: 'User email address',
+export class SiginnupDto {  
+  @ApiProperty({ 
+    description: 'User email address', 
     example: 'user@example.com',
-    required: true,
+    required: true 
   })
+
   @IsEmail()
   @IsNotEmpty()
   email!: string;
-
-  @ApiProperty({
-    description: 'User password (minimum 10 characters)',
+  
+  @ApiProperty({ 
+    description: 'User password (minimum 10 characters)', 
     example: 'password123',
     required: true,
-    minLength: 10,
+    minLength: 10
   })
   @MinLength(10)
   @IsNotEmpty()
   password!: string;
-
-  @ApiProperty({
-    description: 'Username',
+  @ApiProperty({ 
+    description: 'User email address', 
     example: 'pooria05',
-    required: true,
+    required: true 
   })
-  @IsString()
-  @IsNotEmpty()
-  username!: string;
+  username!:string
 }
