@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ConflictException,
-  Inject,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
@@ -9,12 +8,11 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import type { ConfigType } from '@nestjs/config';
+
 import { Auth } from './entities/auth.entity';
 import { SiginnupDto } from './dto/SiginnupDto';
 import { SiginninDto } from './dto/signin.dto';
 import { Hashingservice } from './hashingService/hashingservice.service';
-import jwtConfig from './config/jwt.config';
 
 @Injectable()
 export class AuthService {
@@ -23,109 +21,78 @@ export class AuthService {
     private readonly userRepository: Repository<Auth>,
 
     private readonly hashingService: Hashingservice,
-
     private readonly jwtService: JwtService,
-
-    @Inject(jwtConfig.KEY)
-    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
 
   async signup(signupDto: SiginnupDto) {
-    try {
-      const { email, username, password } = signupDto;
+    const { email, username, password } = signupDto;
 
-      if (!email || !username || !password) {
-        throw new BadRequestException(
-          'Email, username and password are required',
-        );
-      }
+    const existingUser = await this.userRepository.findOne({
+      where: [{ email }, { username }],
+    });
 
-      const existingUser = await this.userRepository.findOne({
-        where: [{ email }, { username }],
-      });
-
-      if (existingUser) {
-        throw new ConflictException(
-          'User with this email or username already exists',
-        );
-      }
-
-      const hashedPassword = await this.hashingService.hash(password);
-
-      const user = this.userRepository.create({
-        email,
-        username,
-        password: hashedPassword,
-      });
-
-      await this.userRepository.save(user);
-
-      return {
-        message: 'User created successfully',
-        user: {
-          id: user.id,
-          email: user.email,
-          username: user.username,
-        },
-      };
-    } catch (error:any) {
-      console.error('Signup Error:', error);
-
-      if (
-        error instanceof BadRequestException ||
-        error instanceof ConflictException
-      ) {
-        throw error;
-      }
-
-      throw new InternalServerErrorException(error.message);
+    if (existingUser) {
+      throw new ConflictException('User already exists');
     }
-  }
-async signin(signinDto: SiginninDto) {
-  const { email, password } = signinDto;
 
-  if (!email || !password) {
-    throw new BadRequestException('Email and password are required');
-  }
+    const hashedPassword = await this.hashingService.hash(password);
 
-  const user = await this.userRepository.findOne({
-    where: { email },
-  });
+    const user = this.userRepository.create({
+      email,
+      username,
+      password: hashedPassword,
+    });
 
-  if (!user) {
-    throw new UnauthorizedException('Invalid email or password');
-  }
+    await this.userRepository.save(user);
 
-  const isMatch = await this.hashingService.compare(
-    password,
-    user.password,
-  );
-
-  if (!isMatch) {
-    throw new UnauthorizedException('Invalid email or password');
+    return {
+      statusCode: 201,
+      message: 'User created successfully',
+    };
   }
 
-  const payload = {
-    sub: user.id,
-    email: user.email,
-  };
+  async signin(signinDto: SiginninDto) {
+    const { email, password } = signinDto;
 
-  const accessToken = await this.jwtService.signAsync(payload, {
-    secret: this.jwtConfiguration.secret,
-    issuer: this.jwtConfiguration.issuer,
-    audience: this.jwtConfiguration.audience,
-    expiresIn: '15m',
-  });
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
 
-  return {
-    statusCode: 200,
-    message: 'Login successful',
-    accessToken,
-    user: {
-      id: user.id,
-      email: user.email,
-      username: user.username,
-    },
-  };
-}
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const isMatch = await this.hashingService.compare(
+      password,
+      user.password,
+    );
+
+    if (!isMatch) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const accessToken = await this.jwtService.signAsync(
+      {
+        sub: user.id,
+        email: user.email,
+      },
+      {
+        secret: 'super_secret_key_change_this_please',
+        issuer: 'localhost:3000',
+        audience: 'localhost:3000',
+        expiresIn: '15m',
+      },
+    );
+
+    return {
+      statusCode: 200,
+      message: 'Login successful',
+      accessToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+      },
+    };
+  }
 }
