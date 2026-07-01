@@ -10,42 +10,81 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.use(helmet());
+  // =========================
+  // SECURITY (Helmet)
+  // =========================
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }),
+  );
 
-  app.useGlobalPipes(new ValidationPipe());
+  // =========================
+  // GLOBAL VALIDATION
+  // =========================
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  );
 
+  // =========================
+  // LOGGER
+  // =========================
   app.useLogger(app.get(Logger));
 
+  // =========================
+  // GLOBAL PREFIX
+  // =========================
+  app.setGlobalPrefix('api/v1');
+
+  // =========================
+  // CORS (IMPORTANT FIXED)
+  // =========================
   app.enableCors({
-    origin: ['http://localhost:5173'],
+    origin: [
+      'http://localhost:5173',
+      // 👉 اینو فقط اگر frontend deploy شد اضافه کن
+      // 'https://your-frontend-domain.com',
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
   });
 
+  // =========================
+  // STATIC FILES (FIXED)
+  // =========================
+  app.useStaticAssets(join(process.cwd(), 'public'));
+
+  // =========================
+  // SWAGGER
+  // =========================
   const config = new DocumentBuilder()
-    .setTitle('project Dashboard backend')
-    .setDescription('Swagger API docs')
+    .setTitle('Project Dashboard Backend')
+    .setDescription('API Documentation')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
-app.setGlobalPrefix('api/v1');
-  app.useStaticAssets(join(__dirname, '..', 'public'));
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('doshboard-api-swagger', app, document, {
+
+  SwaggerModule.setup('dashboard-api-swagger', app, document, {
     explorer: true,
     swaggerOptions: {
       persistAuthorization: true,
     },
   });
 
+  // =========================
+  // SERVER START
+  // =========================
   const port = Number(process.env.PORT) || 8000;
 
   await app.listen(port, '0.0.0.0');
 
-
-  
-
+  console.log(`🚀 Server running on: http://localhost:${port}`);
 }
 
 bootstrap();
