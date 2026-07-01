@@ -43,12 +43,13 @@ async function bootstrap() {
   // =========================
   // CORS (IMPORTANT FIXED)
   // =========================
-  app.enableCors({
-    origin: [
-      '*',
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  });
+ app.enableCors({
+  origin: [
+    'http://localhost:5173',
+    'https://dashboard-project-front-kkqlto1fx-pooriavakilis-projects.vercel.app',
+  ],
+  credentials: true,
+});
 
   // =========================
   // STATIC FILES (FIXED)
