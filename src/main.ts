@@ -45,12 +45,9 @@ async function bootstrap() {
   // =========================
   app.enableCors({
     origin: [
-      'http://localhost:5173',
-      // 👉 اینو فقط اگر frontend deploy شد اضافه کن
-      // 'https://your-frontend-domain.com',
+      '*',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    credentials: true,
   });
 
   // =========================
