@@ -1,23 +1,28 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, MinLength,IsNotEmpty } from "class-validator";
+import {
+  IsEmail,
+  IsNotEmpty,
+  Matches,
+} from "class-validator";
 
 export class SiginninDto {
-        @ApiProperty({ 
-           description: 'User email address', 
-           example: 'user@example.com',
-           required: true 
-         })
-         @IsEmail()
-         @IsNotEmpty()
-         email!: string;
-         
-         @ApiProperty({ 
-           description: 'User password (minimum 10 characters)', 
-           example: 'password123',
-           required: true,
-           minLength: 10
-         })
-         @MinLength(10)
-         @IsNotEmpty()
-         password!: string;
+  @ApiProperty({
+    description: "User email address",
+    example: "user@example.com",
+    required: true,
+  })
+  @IsEmail()
+  @IsNotEmpty()
+  email!: string;
+
+  @ApiProperty({
+    description: "Password (exactly 10 digits)",
+    example: "1234567890",
+    required: true,
+  })
+  @IsNotEmpty()
+  @Matches(/^\d{10}$/, {
+    message: "رمز عبور باید دقیقاً ۱۰ رقم و فقط شامل اعداد باشد.",
+  })
+  password!: string;
 }

@@ -1,30 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, MinLength, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  Matches,
+} from 'class-validator';
 
 export class SiginnupDto {
   @ApiProperty({
     description: 'User email address',
     example: 'user@example.com',
-    required: true,
   })
   @IsEmail()
   @IsNotEmpty()
   email!: string;
 
   @ApiProperty({
-    description: 'User password (minimum 10 characters)',
-    example: 'password123',
-    required: true,
-    minLength: 10,
+    description: 'Password (exactly 10 digits)',
+    example: '1234567890',
   })
   @IsNotEmpty()
-  @MinLength(10)
+  @Matches(/^\d{10}$/, {
+    message: 'Password must contain exactly 10 digits.',
+  })
   password!: string;
 
   @ApiProperty({
     description: 'Username',
     example: 'pooria05',
-    required: true,
   })
   @IsString()
   @IsNotEmpty()
