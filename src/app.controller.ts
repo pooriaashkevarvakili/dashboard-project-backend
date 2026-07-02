@@ -6,6 +6,7 @@ import data from './data/transactions.json';
 import dataOne from './data/news.json'
 import dataTwo from './data/week.json'
 import dataThree from './data/skills.json'
+import dataFour from './data/CyrptoDescription.json'
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -37,5 +38,9 @@ export class AppController {
     @Get('skills')
   skills(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(dataThree);
+  }
+   @Get('cryptoDescription')
+  cryptoDescription(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(dataFour);
   }
 }
