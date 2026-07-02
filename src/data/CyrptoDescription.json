@@ -5,25 +5,30 @@
       "key": 1,
       "title": "موجودی کل",
       "price": "$254,820",
-      "priceOne": "12.4%"
+      "priceOne": "12.4%",
+      "icon": "FaBitcoin"
     },
     {
       "key": 2,
       "title": "سود امروز",
       "price": "$4,280",
-      "priceOne": "2.3%"
+      "priceOne": "2.3%",
+      "icon": "FaEthereum"
     },
     {
       "key": 3,
       "title": "بیت‌کوین",
       "price": "$108,450",
-      "priceOne": "0.25%"
+      "priceOne": "0.6%",
+      "icon": "SiSolana"
     },
     {
-      "key": 5,
+      "key": 4,
       "title": "شاخص بازار",
       "price": "73",
-      "priceOne": "-0.6%"
+      "priceOne": "0.8%",
+
+      "icon": "SiBinance"
     }
   ]
 }
