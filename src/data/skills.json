@@ -1,0 +1,47 @@
+{
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "key": 1,
+      "skills": "html-css"
+     
+    },
+    {
+      "key": 2,
+      "skills": "javascript"
+     
+    },
+      {
+      "key": 3,
+      "skills":"typescript"
+     
+    },
+    {
+      "key": 4,
+      "skills":"React"
+     
+    },
+    {
+      "key": 5,
+      "skills":"Nextjs"
+     
+    },
+    {
+      "key": 6,
+      "skills":"vue"
+     
+    },
+    {
+      "key": 7,
+      "skills":"nuxtjs"
+     
+    },
+
+    {
+      "key": 8,
+      "skills":"nest-js"
+     
+    }
+     
+  ]
+}
