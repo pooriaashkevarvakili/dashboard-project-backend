@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from 'nestjs-pino';
 
 import { JwtModule } from '@nestjs/jwt';
+import { TransactionModule } from './transaction/transaction.module';
 import jwtConfig from './auth/config/jwt.config';
 
 @Module({
@@ -61,6 +62,8 @@ import jwtConfig from './auth/config/jwt.config';
     }),
 
     AuthModule,
+
+    TransactionModule,
   ],
 
   controllers: [AppController],
