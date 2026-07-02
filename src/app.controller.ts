@@ -13,8 +13,12 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-  @Get('image/codekhane')
+  @Get('image/pooria')
   getImage(@Res() res: Response) {
+    return res.sendFile(join(process.cwd(), 'public', 'pooria.jpg'));
+  }
+  @Get('image/codekhane')
+  getImagepooria(@Res() res: Response) {
     return res.sendFile(join(process.cwd(), 'public', 'codekhane.jpeg'));
   }
   @Get('transactions')
