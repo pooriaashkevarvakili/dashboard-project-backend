@@ -4,6 +4,7 @@ import { join } from 'path';
 import type { Response } from 'express';
 import data from './data/transactions.json';
 import dataOne from './data/news.json'
+import dataTwo from './data/week.json'
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -23,5 +24,9 @@ export class AppController {
    @Get('news')
   News(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(dataOne);
+  }
+    @Get('week')
+  Week(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(dataTwo);
   }
 }
