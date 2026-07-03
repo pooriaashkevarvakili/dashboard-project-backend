@@ -1,0 +1,41 @@
+{
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "key": 1,
+      "price-chart": 22000
+     
+    },
+    {
+      "key": 2,
+      "price-chart":25000
+     
+    },
+      {
+      "key": 3,
+      "price-chart":24000
+     
+    },
+    {
+      "key": 4,
+      "price-chart":28000
+     
+    },
+    {
+      "key": 5,
+      "price-chart":32000
+     
+    },
+    {
+      "key": 6,
+      "price-chart":34000
+     
+    },
+    {
+      "key": 7,
+      "price-chart":39000
+     
+    }
+     
+  ]
+}

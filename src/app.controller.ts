@@ -6,15 +6,12 @@ import data from './data/transactions.json';
 import dataOne from './data/news.json'
 import dataTwo from './data/week.json'
 import dataThree from './data/skills.json'
+import dataFive from './data/chartSeries.json'
 import dataFour from './data/CyrptoDescription.json'
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
   @Get('image/pooria')
   getImage(@Res() res: Response) {
     return res.sendFile(join(process.cwd(), 'public', 'pooria.jpg'));
@@ -42,5 +39,9 @@ export class AppController {
    @Get('cryptoDescription')
   cryptoDescription(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(dataFour);
+  }
+     @Get('price-chart')
+  priceChart(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(dataFive);
   }
 }
