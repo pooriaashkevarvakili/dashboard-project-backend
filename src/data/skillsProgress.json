@@ -3,48 +3,24 @@
   "data": [
     {
       "key": 1,
-      "skills": "HTML-CSS",
-      "color": "#22c55e",
-      "progressNumber": "95"
-    },
-    {
-      "key": 2,
       "skills": "javascript",
       "color": "#22c55e",
       "progressNumber": "95"
     },
     {
-      "key": 3,
+      "key": 2,
       "skills": "Typescript",
       "color": "#22c55e",
       "progressNumber": "95"
     },
     {
-     "key": 4,
+     "key": 3,
       "skills": "React",
       "color": "#22c55e",
       "progressNumber": "95"
     },
      {
-     "key": 5,
-      "skills": "Next-js",
-      "color": "#22c55e",
-      "progressNumber": "95"
-    },
-     {
-     "key": 6,
-      "skills": "Vue-js",
-      "color": "#22c55e",
-      "progressNumber": "95"
-    },
-     {
-     "key": 7,
-      "skills": "Nuxt-js",
-      "color": "#22c55e",
-      "progressNumber": "95"
-    },
-     {
-     "key": 8,
+     "key": 4,
       "skills": "Nest-js",
       "color": "#22c55e",
       "progressNumber": "95"
