@@ -5,18 +5,11 @@ import type { Response } from 'express';
 import data from './data/transactions.json';
 import dataOne from './data/news.json'
 import dataTwo from './data/week.json'
-import dataThree from './data/skills.json'
-import dataFive from './data/chartSeries.json'
-import dataFour from './data/CyrptoDescription.json'
-import dataSix from './data/skillsProgress.json'
+
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('image/pooria')
-  getImage(@Res() res: Response) {
-    return res.sendFile(join(process.cwd(), 'public', 'pooria.jpg'));
-  }
   @Get('image/codekhane')
   getImagepooria(@Res() res: Response) {
     return res.sendFile(join(process.cwd(), 'public', 'codekhane.jpeg'));
@@ -33,20 +26,5 @@ export class AppController {
   Week(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(dataTwo);
   }
-    @Get('skills')
-  skills(@Res() res: Response): void {
-    res.status(HttpStatus.OK).json(dataThree);
-  }
-   @Get('cryptoDescription')
-  cryptoDescription(@Res() res: Response): void {
-    res.status(HttpStatus.OK).json(dataFour);
-  }
-     @Get('price-chart')
-  priceChart(@Res() res: Response): void {
-    res.status(HttpStatus.OK).json(dataFive);
-  }
-    @Get('skillsProgress')
-  skillsProgress(@Res() res: Response): void {
-    res.status(HttpStatus.OK).json(dataSix);
-  }
+
 }
