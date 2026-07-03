@@ -5,6 +5,7 @@ import type { Response } from 'express';
 import data from './data/transactions.json';
 import dataOne from './data/news.json'
 import dataTwo from './data/week.json'
+import dataFour from './data/CyrptoDescription.json'
 import dataThree from './data/chartSeries.json'
 @Controller()
 export class AppController {
@@ -29,5 +30,9 @@ export class AppController {
     @Get('chartSeries')
   chartSeries(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(dataThree);
+  }
+    @Get('cryptoDescription')
+  cryptoDescription(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(dataFour);
   }
 }
