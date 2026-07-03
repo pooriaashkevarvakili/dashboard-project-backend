@@ -8,6 +8,7 @@ import dataTwo from './data/week.json'
 import dataThree from './data/skills.json'
 import dataFive from './data/chartSeries.json'
 import dataFour from './data/CyrptoDescription.json'
+import dataSix from './data/skillsProgress.json'
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -43,5 +44,9 @@ export class AppController {
      @Get('price-chart')
   priceChart(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(dataFive);
+  }
+    @Get('skillsProgress')
+  skillsProgress(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(dataSix);
   }
 }
