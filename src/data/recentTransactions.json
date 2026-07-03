@@ -1,0 +1,33 @@
+{
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "key": 1,
+      "time": "10:32 AM",
+      "type": "Buy",
+      "amount": "+0.45 BTC",
+     "status": "Completed"
+    },
+    {
+        "key": 2,
+      "time": "09:15 AM",
+      "type": "Sell",
+      "amount": "-1.2 ETH",
+     "status": "Pending"
+    },
+    {
+      "key": 3,
+      "time": "08:45 AM",
+      "type": "Buy",
+      "amount": "+2.5 BNB",
+     "status": "Completed"
+    },
+    {
+       "key": 4,
+      "time": "08:45 AM",
+      "type": "Buy",
+      "amount": "+500 USDT",
+     "status": "Completed"
+    }
+  ]
+}

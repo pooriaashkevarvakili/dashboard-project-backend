@@ -8,6 +8,7 @@ import dataTwo from './data/week.json'
 import dataFour from './data/CyrptoDescription.json'
 import dataThree from './data/chartSeries.json'
 import dataFive from './data/stats.json'
+import dataSix from './data/recentTransactions.json'
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -39,5 +40,9 @@ export class AppController {
   @Get('stats')
   stats(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(dataFive);
+  }
+    @Get('recentTransactions')
+  recentTransactions(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(dataSix);
   }
 }
