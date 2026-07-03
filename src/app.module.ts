@@ -9,6 +9,7 @@ import { LoggerModule } from 'nestjs-pino';
 
 import { JwtModule } from '@nestjs/jwt';
 import { TransactionModule } from './transaction/transaction.module';
+import { CryptoPricesModule } from './crypto-prices/crypto-prices.module';
 import jwtConfig from './auth/config/jwt.config';
 
 @Module({
@@ -64,6 +65,8 @@ import jwtConfig from './auth/config/jwt.config';
     AuthModule,
 
     TransactionModule,
+
+    CryptoPricesModule,
   ],
 
   controllers: [AppController],
