@@ -1,0 +1,29 @@
+{
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "key": 1,
+      "title": "Portfolio Value",
+      "value": "$124,567.89",
+      "change": "0.25"
+    },
+    {
+      "key": 2,
+      "title": "24h Volume",
+      "value": "$2.4B",
+      "change": "+12.3%"
+    },
+    {
+      "key": 3,
+      "title": "Active Assets",
+      "value": "8",
+      "change": "0"
+    },
+    {
+      "key": 4,
+      "title": "Total Profit",
+      "value": "+$12,456",
+      "change": "+3.2%"
+    }
+  ]
+}
