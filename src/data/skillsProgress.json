@@ -19,14 +19,9 @@
       "color": "#22c55e",
       "progressNumber": "95"
     },
-      {
-     "key": 4,
-      "skills": "vue-js",
-      "color": "#22c55e",
-      "progressNumber": "95"
-    },
+   
      {
-     "key": 5,
+     "key": 4,
       "skills": "Nest-js",
       "color": "#22c55e",
       "progressNumber": "95"
