@@ -15,8 +15,7 @@ export class CreateCryptoPriceDto {
   @IsNumber()
   change!: number;
 
-  @IsString()
-  icon!: string;
+ 
 
   @IsString()
   volume!: string;

@@ -13,8 +13,6 @@ export class CryptoPrice {
   @Column('float')
   change!: number;
   @Column()
-  icon!: string;
-  @Column()
   volume!: string;
   @Column()
   marketCap!: string;
