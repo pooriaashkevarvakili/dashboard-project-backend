@@ -74,15 +74,18 @@ getSummary() {
     ((currentValue - totalInvested) / totalInvested) * 100;
 
   return {
-    price,
-    priceRange: {
-      low,
-      high,
+    message: 'Summary loaded successfully',
+    data: {
+      price,
+      priceRange: {
+        low,
+        high,
+      },
+      totalInvested,
+      currentValue,
+      roi: Number(roi.toFixed(2)),
+      totalBalance,
     },
-    totalInvested,
-    currentValue,
-    roi: Number(roi.toFixed(2)),
-    totalBalance,
   };
 }
 }
