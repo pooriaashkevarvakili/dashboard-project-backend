@@ -49,16 +49,10 @@ export class AppController {
   }
    @Get('MarketStatus')
   MarketStatus(@Res() res: Response): void {
-    res.status(HttpStatus.OK).json(MarketStatus);
   }
 @Get('AssetHeader')
 AssetHeader(@Res() res: Response): void {
-  res.status(HttpStatus.OK).json({
-    ...AssetHeader,
-    data: AssetHeader.data.map(item => ({
-      ...item,
-      date: new Date().toISOString(),
-    })),
-  });
+     res.status(HttpStatus.OK).json(AssetHeader);
+
 }
 }
