@@ -51,7 +51,6 @@ export class AppController {
   MarketStatus(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(MarketStatus);
   }
- @Get('AssetHeader')
 @Get('AssetHeader')
 AssetHeader(@Res() res: Response): void {
   res.status(HttpStatus.OK).json({
