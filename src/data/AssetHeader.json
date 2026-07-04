@@ -2,6 +2,7 @@
   "message": "پیام با موفقیت انجام شد",
   "data": [
     {
+        "avatar":"https://cryptologos.cc/logos/bitcoin-btc-logo.png",
       "key":1,
       "title":"Bitcoin",
       "tag":"BTC"
