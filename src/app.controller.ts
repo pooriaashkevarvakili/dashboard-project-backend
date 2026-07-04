@@ -5,6 +5,7 @@ import type { Response } from 'express';
 import transactions from './data/transactions.json';
 import news from './data/news.json'
 import week from './data/week.json'
+import AssetHeader from './data/AssetHeader.json'
 import cryptoDescription from './data/CyrptoDescription.json'
 import chartSeries from './data/chartSeries.json'
 import stats from './data/stats.json'
@@ -50,4 +51,11 @@ export class AppController {
   MarketStatus(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(MarketStatus);
   }
+ @Get('AssetHeader')
+AssetHeader(@Res() res: Response): void {
+  res.status(HttpStatus.OK).json({
+    ...AssetHeader,
+    date: new Date(),
+  });
+}
 }
