@@ -55,4 +55,32 @@ AssetHeader(@Res() res: Response): void {
      res.status(HttpStatus.OK).json(AssetHeader);
 
 }
+@Get('summary')
+getSummary() {
+  const totalInvested = 500000;
+
+  const price = Math.floor(Math.random() * 10000) + 115000;
+
+  const low = price - Math.floor(Math.random() * 1000);
+  const high = price + Math.floor(Math.random() * 1000);
+
+  const totalBalance = 8.25;
+
+  const currentValue = Math.round(price * totalBalance);
+
+  const roi =
+    ((currentValue - totalInvested) / totalInvested) * 100;
+
+  return {
+    price,
+    priceRange: {
+      low,
+      high,
+    },
+    totalInvested,
+    currentValue,
+    roi: Number(roi.toFixed(2)),
+    totalBalance,
+  };
+}
 }
