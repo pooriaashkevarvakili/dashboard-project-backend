@@ -2,13 +2,14 @@ import { Controller, Get, HttpStatus, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { join } from 'path';
 import type { Response } from 'express';
-import data from './data/transactions.json';
-import dataOne from './data/news.json'
-import dataTwo from './data/week.json'
-import dataFour from './data/CyrptoDescription.json'
-import dataThree from './data/chartSeries.json'
-import dataFive from './data/stats.json'
-import dataSix from './data/recentTransactions.json'
+import transactions from './data/transactions.json';
+import news from './data/news.json'
+import week from './data/week.json'
+import cryptoDescription from './data/CyrptoDescription.json'
+import chartSeries from './data/chartSeries.json'
+import stats from './data/stats.json'
+import recentTransactions from './data/recentTransactions.json'
+import MarketStatus from './data/MarketStats.json'
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -19,30 +20,34 @@ export class AppController {
   }
   @Get('transactions')
   application(@Res() res: Response): void {
-    res.status(HttpStatus.OK).json(data);
+    res.status(HttpStatus.OK).json(transactions);
   }
    @Get('news')
   News(@Res() res: Response): void {
-    res.status(HttpStatus.OK).json(dataOne);
+    res.status(HttpStatus.OK).json(news);
   }
     @Get('week')
   Week(@Res() res: Response): void {
-    res.status(HttpStatus.OK).json(dataTwo);
+    res.status(HttpStatus.OK).json(week);
   }
     @Get('chartSeries')
   chartSeries(@Res() res: Response): void {
-    res.status(HttpStatus.OK).json(dataThree);
+    res.status(HttpStatus.OK).json(chartSeries);
   }
     @Get('cryptoDescription')
   cryptoDescription(@Res() res: Response): void {
-    res.status(HttpStatus.OK).json(dataFour);
+    res.status(HttpStatus.OK).json(cryptoDescription);
   }
   @Get('stats')
   stats(@Res() res: Response): void {
-    res.status(HttpStatus.OK).json(dataFive);
+    res.status(HttpStatus.OK).json(stats);
   }
     @Get('recentTransactions')
   recentTransactions(@Res() res: Response): void {
-    res.status(HttpStatus.OK).json(dataSix);
+    res.status(HttpStatus.OK).json(recentTransactions);
+  }
+   @Get('MarketStatus')
+  MarketStatus(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(MarketStatus);
   }
 }

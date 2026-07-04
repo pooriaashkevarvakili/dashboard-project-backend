@@ -1,0 +1,30 @@
+    {
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "key": 1,
+      "title": "877878",
+      "value": "787878878b",
+      "prefix": "FaDollarSign"
+   
+    },
+    {
+        "key": 2,
+      "title": "24h Volume",
+      "value": "$2.4B",
+      "prefix": "FaChartLine "
+    },
+    {
+      "key": 3,
+      "title": "Market Cap",
+      "value": "$1.29T",
+     "prefix": "FaDollarSign"
+    },
+    {
+       "key": 4,
+      "title": "Total Supply",
+      "value": "19.7M BTC",
+      "prefix": "FaWallet"
+    }
+  ]
+}
