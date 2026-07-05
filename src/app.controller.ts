@@ -12,6 +12,7 @@ import stats from './data/stats.json'
 import recentTransactions from './data/recentTransactions.json'
 import MarketStatus from './data/MarketStats.json'
 import priceChart from './data/priceChart.json'
+import coinInterview from './data/CoinInterview.json'
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -61,6 +62,11 @@ AssetHeader(@Res() res: Response): void {
 @Get('priceChart')
 priceChart(@Res() res: Response): void {
      res.status(HttpStatus.OK).json(priceChart);
+
+}
+@Get('coinInterview')
+coinInterview(@Res() res: Response): void {
+     res.status(HttpStatus.OK).json(coinInterview);
 
 }
 @Get('summary')
