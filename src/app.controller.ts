@@ -11,6 +11,7 @@ import chartSeries from './data/chartSeries.json'
 import stats from './data/stats.json'
 import recentTransactions from './data/recentTransactions.json'
 import MarketStatus from './data/MarketStats.json'
+import priceChart from './data/priceChart.json'
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -55,6 +56,11 @@ export class AppController {
 @Get('AssetHeader')
 AssetHeader(@Res() res: Response): void {
      res.status(HttpStatus.OK).json(AssetHeader);
+
+}
+@Get('priceChart')
+priceChart(@Res() res: Response): void {
+     res.status(HttpStatus.OK).json(priceChart);
 
 }
 @Get('summary')
