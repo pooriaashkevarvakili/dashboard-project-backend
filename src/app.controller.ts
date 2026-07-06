@@ -11,6 +11,7 @@ import chartSeries from './data/chartSeries.json'
 import stats from './data/stats.json'
 import recentTransactions from './data/recentTransactions.json'
 import MarketStatus from './data/MarketStats.json'
+import performanceSummaryTimeline from './data/PerformanceSummaryTimeLine.json'
 import priceChart from './data/priceChart.json'
 import coinInterview from './data/CoinInterview.json'
 @Controller()
@@ -25,9 +26,13 @@ export class AppController {
   application(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(transactions);
   }
+
    @Get('news')
   News(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(news);
+  }  @Get('performanceSummaryTimeline')
+  performanceSummaryTimeline(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(performanceSummaryTimeline);
   }
     @Get('week')
   Week(@Res() res: Response): void {

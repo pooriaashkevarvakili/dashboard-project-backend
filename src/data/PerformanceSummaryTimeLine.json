@@ -1,0 +1,29 @@
+{
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "key": 1,
+      "title": "All Time High",
+      "value": "$73,737 (Nov 2025)",
+      "color": "green"
+    },
+    {
+      "key": 2,
+      "title": "Current Price",
+      "value": "$68,450",
+      "color": "blue"
+    },
+    {
+      "key": 3,
+      "title": "All Time Low",
+      "value": "$67.81 (Jul 2013)",
+      "color": "orange"
+    },
+    {
+      "key": 4,
+      "title": "Year to Date",
+      "value": "+42.3% (2026)",
+      "color": "purple"
+    }
+  ]
+}
