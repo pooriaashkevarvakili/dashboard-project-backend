@@ -9,6 +9,7 @@ import AssetHeader from './data/AssetHeader.json'
 import cryptoDescription from './data/CyrptoDescription.json'
 import chartSeries from './data/chartSeries.json'
 import stats from './data/stats.json'
+import progressAssetDetails from './data/ProgressAssetDetails.json'
 import recentTransactions from './data/recentTransactions.json'
 import MarketStatus from './data/MarketStats.json'
 import performanceSummaryTimeline from './data/PerformanceSummaryTimeLine.json'
@@ -26,7 +27,10 @@ export class AppController {
   application(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(transactions);
   }
-
+@Get('progressAssetDetails')
+  progressAssetDetails(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(progressAssetDetails);
+  }
    @Get('news')
   News(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(news);

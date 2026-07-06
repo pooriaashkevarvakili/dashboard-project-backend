@@ -1,0 +1,31 @@
+{
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "key": 1,
+      "currency": "+42.30%",
+      "TotalInvested": 5000,
+      "CurrentValue": "71150",
+      "color": "#52c41a",
+      "colorOne": "#52c41a"
+    },
+    {
+      "key": 2,
+      "TotalInvested": 5000,
+      "CurrentValue": "71150",
+      "color": "#52c41a"
+    },
+    {
+      "key": 3,
+      "TotalInvested": 5000,
+      "CurrentValue": "71150",
+      "color": "#52c41a"
+    },
+    {
+      "key": 4,
+      "TotalInvested": 21150,
+      "CurrentValue": "42.3",
+      "color": "#52c41a"
+    }
+  ]
+}
