@@ -1,36 +1,45 @@
-// src/notes/notes.service.ts
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import { Injectable } from "@nestjs/common";
-import { CreateNoteDto } from "./dto/notes.dto";
-
-export interface Note {
-  id: number;
-  title: string;
-  content: string;
-  createdAt: Date;
-}
+import { CreateNoteDto } from './dto/notes.dto';
+import { NoteEntity } from './entities/note.entity';
 
 @Injectable()
 export class NotesService {
-  private notes: Note[] = [];
+  constructor(
+    @InjectRepository(NoteEntity)
+    private readonly noteRepository: Repository<NoteEntity>,
+  ) {}
 
-  create(dto: CreateNoteDto) {
-    const note: Note = {
-      id: Date.now(),
+  async create(dto: CreateNoteDto) {
+    const note = this.noteRepository.create({
       title: dto.title,
       content: dto.content,
-      createdAt: new Date(),
-    };
+      color: '#f6ffed',
+    });
 
-    this.notes.push(note);
+    const result = await this.noteRepository.save(note);
 
     return {
       success: true,
-      data: note,
+      data: result,
     };
   }
 
-  findAll(): Note[] {
-    return this.notes;
+  async findAll() {
+    return await this.noteRepository.find({
+      order: {
+        id: 'DESC',
+      },
+    });
+  }
+
+  async remove(id: number) {
+    await this.noteRepository.delete(id);
+
+    return {
+      message: 'Deleted successfully',
+    };
   }
 }

@@ -5,7 +5,7 @@ export class NoteEntity {
   @PrimaryGeneratedColumn()
   id!: number;
   @Column()
-  Content!: string;
+  content!: string;
    @Column()
   title!: string;
    @Column()

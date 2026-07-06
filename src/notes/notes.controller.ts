@@ -1,5 +1,5 @@
 // src/notes/notes.controller.ts
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CreateNoteDto } from './dto/notes.dto';
 import { NotesService } from './notes.service';
 
@@ -15,5 +15,9 @@ export class NotesController {
   @Get()
   findAll() {
     return this.notesService.findAll();
+  }
+   @Delete(":id")
+  remove(@Param("id") id: string) {
+    return this.notesService.remove(+id);
   }
 }

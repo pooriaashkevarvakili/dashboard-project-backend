@@ -17,12 +17,5 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
-   async remove(id: number) {
-
-    await this.NoteEntity.delete(id);
-
-    return {
-      message: 'Deleted successfully',
-    };
-  }
+ 
 }
