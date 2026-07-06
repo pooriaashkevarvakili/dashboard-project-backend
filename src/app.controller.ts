@@ -47,7 +47,7 @@ async NoteTitleAll() {
   NoteTitle(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(NoteTitle);
   }
-  @Delete(':id/removeNotes')
+@Delete('removeNotes/:id')
 remove(@Param('id') id: string) {
   return this.appService.remove(+id);
 }
