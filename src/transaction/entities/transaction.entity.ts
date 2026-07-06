@@ -21,7 +21,9 @@ export class Transaction {
 
   @Column()
   price!: string;
+  @Column()
 
+side!:string
   @CreateDateColumn()
   createdAt!: Date;
 }
