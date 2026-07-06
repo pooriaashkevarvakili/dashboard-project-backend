@@ -16,8 +16,7 @@ name!:string
 
   @IsBoolean()
   status!: boolean;
-  @IsString()
-  side!: string;
+  
   @IsOptional()
   time?: Date;
 }

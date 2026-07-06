@@ -14,10 +14,7 @@ export class OrderHistoryTable {
   type!: string;
    @Column()
   name!:string
-@Column({
-  nullable: true,
-})
-side!: string;
+
   @Column('decimal')
   price!: number;
 
