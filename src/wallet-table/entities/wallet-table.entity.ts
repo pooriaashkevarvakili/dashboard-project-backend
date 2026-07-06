@@ -23,7 +23,11 @@ export class WalletTable {
   balance!: number;
 
   @Column()
-  currency!: string
+  currency!: string;
+
+
+
+
 
   @Column()
   status!: string;
