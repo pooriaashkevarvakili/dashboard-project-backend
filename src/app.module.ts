@@ -16,6 +16,7 @@ import { NotesModule } from './notes/notes.module';
 import { NotesService } from './notes/notes.service';
 import jwtConfig from './auth/config/jwt.config';
 import { NotesController } from './notes/notes.controller';
+import { NoteEntity } from './notes/entities/note.entity';
 
 @Module({
   imports: [
@@ -45,7 +46,7 @@ import { NotesController } from './notes/notes.controller';
         logging: false,
       }),
     }),
-
+TypeOrmModule.forFeature([NoteEntity]),
     // Logger
     LoggerModule.forRootAsync({
       imports: [ConfigModule],

@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Delete, Get, HttpStatus, Param, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { join } from 'path';
 import type { Response } from 'express';
@@ -15,6 +15,7 @@ import MarketStatus from './data/MarketStats.json'
 import performanceSummaryTimeline from './data/PerformanceSummaryTimeLine.json'
 import priceChart from './data/priceChart.json'
 import coinInterview from './data/CoinInterview.json'
+import NoteTitle from './data/notes.json'
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -38,6 +39,18 @@ export class AppController {
   performanceSummaryTimeline(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(performanceSummaryTimeline);
   }
+  @Get('NoteTitleAll')
+async NoteTitleAll() {
+  return this.appService.findAll();
+}
+   @Get('NoteTitle')
+  NoteTitle(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(NoteTitle);
+  }
+  @Delete(':id/removeNotes')
+remove(@Param('id') id: string) {
+  return this.appService.remove(+id);
+}
     @Get('week')
   Week(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(week);
