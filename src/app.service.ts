@@ -18,6 +18,7 @@ export class AppService {
     return 'Hello World!';
   }
    async remove(id: number) {
+
     await this.NoteEntity.delete(id);
 
     return {
