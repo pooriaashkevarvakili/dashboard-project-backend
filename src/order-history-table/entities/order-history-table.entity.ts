@@ -15,7 +15,7 @@ export class OrderHistoryTable {
    @Column()
   name!:string
 @Column({
-  default: 'buy',
+  nullable: true,
 })
 side!: string;
   @Column('decimal')

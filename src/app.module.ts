@@ -10,6 +10,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { JwtModule } from '@nestjs/jwt';
 import { TransactionModule } from './transaction/transaction.module';
 import { CryptoPricesModule } from './crypto-prices/crypto-prices.module';
+import { OrderHistoryTableModule } from './order-history-table/order-history-table.module';
 import jwtConfig from './auth/config/jwt.config';
 
 @Module({
@@ -28,7 +29,7 @@ import jwtConfig from './auth/config/jwt.config';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-          url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
+         url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
         type: 'postgres',
         host: config.get<string>('DB_HOST'),
         port: Number(config.get<string>('DB_PORT')),
@@ -68,6 +69,7 @@ import jwtConfig from './auth/config/jwt.config';
 
     CryptoPricesModule,
 
+    OrderHistoryTableModule,
   ],
 
   controllers: [AppController],
