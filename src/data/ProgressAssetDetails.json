@@ -6,9 +6,7 @@
       "currency": "+42.30%",
       "TotalInvested": 5000,
       "CurrentValue": "71150",
-      "color": "#52c41a",
-      "colorOne": "#52c41a"
-    },
+      "color": "#52c41a"    },
     {
       "key": 2,
       "TotalInvested": 5000,
