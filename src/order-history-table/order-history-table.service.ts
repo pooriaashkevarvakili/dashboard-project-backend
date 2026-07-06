@@ -26,7 +26,6 @@ export class OrderHistoryTableService implements OnModuleInit {
     const data = [
       {
         name: '#ORD-001',
-        side: 'buy',
         price: 64200,
         amount: 0.85,
         total: 54570,
