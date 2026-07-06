@@ -11,6 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TransactionModule } from './transaction/transaction.module';
 import { CryptoPricesModule } from './crypto-prices/crypto-prices.module';
 import { OrderHistoryTableModule } from './order-history-table/order-history-table.module';
+import { WalletTableModule } from './wallet-table/wallet-table.module';
 import jwtConfig from './auth/config/jwt.config';
 
 @Module({
@@ -70,6 +71,8 @@ import jwtConfig from './auth/config/jwt.config';
     CryptoPricesModule,
 
     OrderHistoryTableModule,
+
+    WalletTableModule,
   ],
 
   controllers: [AppController],
