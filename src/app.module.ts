@@ -18,6 +18,7 @@ import jwtConfig from './auth/config/jwt.config';
 import { NotesController } from './notes/notes.controller';
 import { NoteEntity } from './notes/entities/note.entity';
 import { OrderTableModule } from './order-table/order-table.module';
+import { PositionColumnsTableModule } from './position-columns-table/position-columns-table.module';
 
 @Module({
   imports: [
@@ -82,6 +83,8 @@ TypeOrmModule.forFeature([NoteEntity]),
     NotesModule,
 
     OrderTableModule,
+
+    PositionColumnsTableModule,
   ],
 
   controllers: [AppController, NotesController],
