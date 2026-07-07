@@ -16,6 +16,7 @@ import performanceSummaryTimeline from './data/PerformanceSummaryTimeLine.json'
 import priceChart from './data/priceChart.json'
 import coinInterview from './data/CoinInterview.json'
 import NoteTitle from './data/notes.json'
+import chartSeriesCanslick from './data/ChartSeriesCanslick.json'
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -47,7 +48,10 @@ async NoteTitleAll() {
   NoteTitle(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(NoteTitle);
   }
-
+  @Get('chartSeriesCanslick')
+  chartSeriesCanslick(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(chartSeriesCanslick);
+  }
     @Get('week')
   Week(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(week);
