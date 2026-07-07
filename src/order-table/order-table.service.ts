@@ -106,6 +106,7 @@ export class OrderTableService implements OnModuleInit {
         price: item.price,
         time: item.time,
         name: item.name,
+        status:item.status
       })),
     };
   }
