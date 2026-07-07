@@ -17,6 +17,7 @@ import { NotesService } from './notes/notes.service';
 import jwtConfig from './auth/config/jwt.config';
 import { NotesController } from './notes/notes.controller';
 import { NoteEntity } from './notes/entities/note.entity';
+import { OrderTableModule } from './order-table/order-table.module';
 
 @Module({
   imports: [
@@ -79,6 +80,8 @@ TypeOrmModule.forFeature([NoteEntity]),
     WalletTableModule,
 
     NotesModule,
+
+    OrderTableModule,
   ],
 
   controllers: [AppController, NotesController],
