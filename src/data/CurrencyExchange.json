@@ -1,0 +1,20 @@
+{
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "symbol": "BTCUSDT",
+      "baseAsset": "BTC",
+      "quoteAsset": "USDT",
+      "icon": "https://cryptologos.cc/logos/bitcoin-btc-logo.png",
+      "lastPrice": 43280.5,
+      "priceChange": 974.7,
+      "priceChangePercent": 2.3,
+      "priceChangeDirection": "up",
+      "high24h": 43500,
+      "low24h": 42800,
+      "volume24h": 1234,
+      "volumeUnit": "BTC",
+      "status": "LIVE"
+    }
+  ]
+}

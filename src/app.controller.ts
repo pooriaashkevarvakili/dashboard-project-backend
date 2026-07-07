@@ -16,6 +16,7 @@ import performanceSummaryTimeline from './data/PerformanceSummaryTimeLine.json'
 import priceChart from './data/priceChart.json'
 import coinInterview from './data/CoinInterview.json'
 import NoteTitle from './data/notes.json'
+import currencyExchange from './data/CurrencyExchange.json'
 import chartSeriesCanslick from './data/ChartSeriesCanslick.json'
 @Controller()
 export class AppController {
@@ -28,6 +29,10 @@ export class AppController {
   @Get('transactions')
   application(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(transactions);
+  }
+   @Get('currencyExchange')
+  currencyExchange(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(currencyExchange);
   }
 @Get('progressAssetDetails')
   progressAssetDetails(@Res() res: Response): void {
