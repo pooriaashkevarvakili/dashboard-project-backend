@@ -47,7 +47,7 @@ async function bootstrap() {
  app.enableCors({
   origin: [
     'http://localhost:5173',
-    'https://dashboard-project-front-18m5k2ii9-pooriavakilis-projects.vercel.app',
+    'https://dashboard-project-front-gn8dzkx4l-pooriavakilis-projects.vercel.app',
   ],
   credentials: true,
 });
