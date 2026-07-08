@@ -10,8 +10,13 @@ export class MarketTradesTable {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ type: 'enum', enum: Isbuyer })
-  isBuyer!: Isbuyer;      
+ @Column({ 
+  type: 'enum', 
+  enum: Isbuyer, 
+  nullable: true,       
+  default: 'FALSE' 
+})
+isBuyer!: Isbuyer;    
 
   @Column('decimal', { precision: 18, scale: 8 })
   price!: number;

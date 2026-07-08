@@ -20,6 +20,7 @@ import { NoteEntity } from './notes/entities/note.entity';
 import { OrderTableModule } from './order-table/order-table.module';
 import { PositionColumnsTableModule } from './position-columns-table/position-columns-table.module';
 import { MarketTradesTableModule } from './market-trades-table/market-trades-table.module';
+import { OrderBookModule } from './order-book/order-book.module';
 
 @Module({
   imports: [
@@ -88,6 +89,8 @@ TypeOrmModule.forFeature([NoteEntity]),
     PositionColumnsTableModule,
 
     MarketTradesTableModule,
+
+    OrderBookModule,
   ],
 
   controllers: [AppController, NotesController],
