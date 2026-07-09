@@ -22,6 +22,7 @@ import { PositionColumnsTableModule } from './position-columns-table/position-co
 import { MarketTradesTableModule } from './market-trades-table/market-trades-table.module';
 import { OrderBookModule } from './order-book/order-book.module';
 import { SpotAssetsModule } from './spot-assets/spot-assets.module';
+import { FuturesAssetstableModule } from './futures-assetstable/futures-assetstable.module';
 
 @Module({
   imports: [
@@ -39,7 +40,7 @@ import { SpotAssetsModule } from './spot-assets/spot-assets.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-       url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
+      url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
         type: 'postgres',
         host: config.get<string>('DB_HOST'),
         port: Number(config.get<string>('DB_PORT')),
@@ -49,6 +50,7 @@ import { SpotAssetsModule } from './spot-assets/spot-assets.module';
         autoLoadEntities: true,
         synchronize: true,
         logging: false,
+     
       }),
     }),
 TypeOrmModule.forFeature([NoteEntity]),
@@ -94,6 +96,8 @@ TypeOrmModule.forFeature([NoteEntity]),
     OrderBookModule,
 
     SpotAssetsModule,
+
+    FuturesAssetstableModule,
   ],
 
   controllers: [AppController, NotesController],
