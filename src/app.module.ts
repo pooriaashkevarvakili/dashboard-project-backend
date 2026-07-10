@@ -24,6 +24,7 @@ import { OrderBookModule } from './order-book/order-book.module';
 import { SpotAssetsModule } from './spot-assets/spot-assets.module';
 import { FuturesAssetstableModule } from './futures-assetstable/futures-assetstable.module';
 import { MarginAssetTableModule } from './margin-asset-table/margin-asset-table.module';
+import { ExternalWalletstableModule } from './external-walletstable/external-walletstable.module';
 
 @Module({
   imports: [
@@ -101,6 +102,8 @@ TypeOrmModule.forFeature([NoteEntity]),
     FuturesAssetstableModule,
 
     MarginAssetTableModule,
+
+    ExternalWalletstableModule,
   ],
 
   controllers: [AppController, NotesController],
