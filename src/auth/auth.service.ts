@@ -13,12 +13,14 @@ import { Auth } from './entities/auth.entity';
 import { SiginnupDto } from './dto/SiginnupDto';
 import { SiginninDto } from './dto/signin.dto';
 import { Hashingservice } from './hashingService/hashingservice.service';
+import { CaptchaService } from './Capta.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(Auth)
     private readonly userRepository: Repository<Auth>,
+  private readonly captchaService: CaptchaService,
 
     private readonly hashingService: Hashingservice,
     private readonly jwtService: JwtService,
@@ -52,47 +54,41 @@ export class AuthService {
   }
 
   async signin(signinDto: SiginninDto) {
-    const { email, password } = signinDto;
+  const { email, password, captchaToken } = signinDto;
 
-    const user = await this.userRepository.findOne({
-      where: { email },
-    });
+  await this.captchaService.verify(captchaToken);
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid email or password');
-    }
+  const user = await this.userRepository.findOne({
+    where: { email },
+  });
 
-    const isMatch = await this.hashingService.compare(
-      password,
-      user.password,
-    );
-
-    if (!isMatch) {
-      throw new UnauthorizedException('Invalid email or password');
-    }
-
-    const accessToken = await this.jwtService.signAsync(
-      {
-        sub: user.id,
-        email: user.email,
-      },
-      {
-        secret: 'super_secret_key_change_this_please',
-        issuer: 'localhost:3000',
-        audience: 'localhost:3000',
-        expiresIn: '15m',
-      },
-    );
-
-    return {
-      statusCode: 200,
-      message: 'Login successful',
-      accessToken,
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-      },
-    };
+  if (!user) {
+    throw new UnauthorizedException('Invalid email or password');
   }
+
+  const isMatch = await this.hashingService.compare(
+    password,
+    user.password,
+  );
+
+  if (!isMatch) {
+    throw new UnauthorizedException('Invalid email or password');
+  }
+
+  const accessToken = await this.jwtService.signAsync({
+    sub: user.id,
+    email: user.email,
+  });
+
+  return {
+  statusCode: 200,
+  message: 'Login successful',
+  accessToken,
+  user: {
+    id: user.id,
+    email: user.email,
+    username: user.username,
+  },
+  };
+}
 }

@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import {
   IsEmail,
   IsNotEmpty,
+  IsString,
   Matches,
 } from "class-validator";
 
@@ -11,6 +12,14 @@ export class SiginninDto {
     example: "user@example.com",
     required: true,
   })
+   @ApiProperty({
+    description: 'Google reCAPTCHA token',
+    example: '03AFcWeA7xxxxxxxxxxxxxxxxxxxxxxxx',
+    required: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  captchaToken!: string;
   @IsEmail()
   @IsNotEmpty()
   email!: string;

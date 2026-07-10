@@ -28,25 +28,25 @@ export class AuthController {
     limit:3
   }
 })
-  @Post('signin')
-  async signin(
-    @Body() signinDto: SiginninDto,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    const result = await this.authService.signin(signinDto);
+ @Post('signin')
+async signin(
+  @Body() signinDto: SiginninDto,
+  @Res({ passthrough: true }) response: Response,
+) {
+  const result = await this.authService.signin(signinDto);
 
-    response.cookie('accessToken', result.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 15 * 60 * 1000, // 15 دقیقه
-    });
+  response.cookie('accessToken', result.accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 15 * 60 * 1000,
+  });
 
-    return {
-      statusCode: 200,
-      message: 'Login successful',
-      accessToken: result.accessToken,
-      user: result.user,
-    };
-  }
+  return {
+    statusCode: 200,
+    message: 'Login successful',
+    accessToken: result.accessToken,
+    user: result.user,
+  };
+}
 }

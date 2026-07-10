@@ -8,6 +8,7 @@ import { AuthController } from './auth.controller';
 import { Auth } from './entities/auth.entity';
 import { Hashingservice } from './hashingService/hashingservice.service';
 import jwtConfig from './config/jwt.config';
+import { CaptchaService } from './Capta.service';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import jwtConfig from './config/jwt.config';
     ConfigModule.forFeature(jwtConfig),
   ],
   controllers: [AuthController],
-  providers: [AuthService, Hashingservice],
+  providers: [AuthService, Hashingservice,CaptchaService],
 })
 export class AuthModule {}
