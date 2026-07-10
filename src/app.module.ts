@@ -25,6 +25,7 @@ import { SpotAssetsModule } from './spot-assets/spot-assets.module';
 import { FuturesAssetstableModule } from './futures-assetstable/futures-assetstable.module';
 import { MarginAssetTableModule } from './margin-asset-table/margin-asset-table.module';
 import { ExternalWalletstableModule } from './external-walletstable/external-walletstable.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -33,7 +34,12 @@ import { ExternalWalletstableModule } from './external-walletstable/external-wal
       isGlobal: true,
       envFilePath: '.env',
     }),
-
+ThrottlerModule.forRoot([
+  {
+    ttl:10000,
+    limit:6
+  }
+]),
     // JWT
     JwtModule.registerAsync(jwtConfig.asProvider()),
 
