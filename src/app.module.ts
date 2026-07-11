@@ -48,7 +48,7 @@ ThrottlerModule.forRoot([
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-     url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
+    url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
         type: 'postgres',
         host: config.get<string>('DB_HOST'),
         port: Number(config.get<string>('DB_PORT')),

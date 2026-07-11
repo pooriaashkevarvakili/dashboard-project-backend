@@ -17,6 +17,7 @@ import priceChart from './data/priceChart.json'
 import coinInterview from './data/CoinInterview.json'
 import NoteTitle from './data/notes.json'
 import walletFooter from './data/walletFooter.json'
+import statsCards from './data/StatCards.json'
 import currencyExchange from './data/CurrencyExchange.json'
 import chartSeriesCanslick from './data/ChartSeriesCanslick.json'
 @Controller()
@@ -61,6 +62,10 @@ async NoteTitleAll() {
   @Get('chartSeriesCanslick')
   chartSeriesCanslick(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(chartSeriesCanslick);
+  }
+   @Get('statsCards')
+  statsCards(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(statsCards);
   }
     @Get('week')
   Week(@Res() res: Response): void {
