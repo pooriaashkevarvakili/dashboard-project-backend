@@ -6,10 +6,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import {TransactionType} from '../TransactionType.enum'
+import { TransactionType } from '../TransactionType.enum';
 
-@Entity('transactions-filter-search')
-export class TransactionFilterSearch {
+@Entity('transactions_filter')
+export class TransactionsFilter {
   @PrimaryGeneratedColumn()
   id!: number;
 

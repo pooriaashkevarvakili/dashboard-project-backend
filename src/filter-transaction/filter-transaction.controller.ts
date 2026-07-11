@@ -11,6 +11,10 @@ export class FilterTransactionController {
   create(@Body() createFilterTransactionDto: CreateFilterTransactionDto) {
     return this.transactionsService.create(createFilterTransactionDto);
   }
+@Get('/all')
+findAllData(@Query() filters: CreateFilterTransactionDto) {
+  return this.transactionsService.findAll(filters);
+}
 @Get('/search')
 findAll(
   @Query('search') search?: string,

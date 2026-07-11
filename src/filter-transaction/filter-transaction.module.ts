@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { FilterTransactionService } from './filter-transaction.service';
 import { FilterTransactionController } from './filter-transaction.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {TransactionFilterSearch} from './entities/filter-transaction.entity'
+import {TransactionsFilter} from './entities/filter-transaction.entity'
 @Module({
-        imports: [TypeOrmModule.forFeature([TransactionFilterSearch])],
+        imports: [TypeOrmModule.forFeature([TransactionsFilter])],
   
   controllers: [FilterTransactionController],
   providers: [FilterTransactionService],
