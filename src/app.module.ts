@@ -27,6 +27,7 @@ import { MarginAssetTableModule } from './margin-asset-table/margin-asset-table.
 import { ExternalWalletstableModule } from './external-walletstable/external-walletstable.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { FilterTransactionModule } from './filter-transaction/filter-transaction.module';
+import { CryptoTablesModule } from './crypto-tables/crypto-tables.module';
 
 @Module({
   imports: [
@@ -113,6 +114,8 @@ TypeOrmModule.forFeature([NoteEntity]),
     ExternalWalletstableModule,
 
     FilterTransactionModule,
+
+    CryptoTablesModule,
   ],
 
   controllers: [AppController, NotesController],
