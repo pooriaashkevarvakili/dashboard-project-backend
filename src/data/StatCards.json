@@ -24,7 +24,7 @@
     },
     {
       "title": "Active Coins",
-      "value": "uniqueCoins",
+      "value": "15%",
       "icon": "🔄",
       "change": "+0",
       "color": "from-purple-500 to-purple-600"
