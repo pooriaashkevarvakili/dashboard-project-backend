@@ -21,6 +21,7 @@ import walletFooter from './data/walletFooter.json'
 import statsCards from './data/StatCards.json'
 import marketData from './data/marketData.json'
 import holdersData from './data/HoldersData.json'
+import holdersTabAddress from './data/holdersTabAddress.json'
 import ReactionData from './data/ReactionData.json'
 import currencyExchange from './data/CurrencyExchange.json'
 import chartSeriesCanslick from './data/ChartSeriesCanslick.json'
@@ -39,6 +40,10 @@ export class AppController {
     @Get('reactionData')
   reactionData(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(ReactionData);
+  }
+      @Get('holdersTabAddress')
+  holdersTabAddress(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(holdersTabAddress);
   }
     @Get('holdersData')
   holdersData(@Res() res: Response): void {

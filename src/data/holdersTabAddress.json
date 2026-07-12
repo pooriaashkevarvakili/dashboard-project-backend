@@ -1,0 +1,25 @@
+{
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "addr": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+      "balance": "1,234,567 BTC",
+      "share": "5.88"
+    },
+    {
+      "addr": "3D2oetdNuZUqQHPJmcMDDHYoqkyNVsFk9r",
+      "balance": "876,543 BTC",
+      "share": "4.17%"
+    },
+    {
+      "addr": "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
+      "balance": "543,210 BTC",
+      "share": "2.59%"
+    },
+    {
+      "addr": "1L6BwPm5z3Mkwk5sL2mCfKdMvLVqVzUxGp",
+      "balance": "432,109 BTC",
+      "share": "2.06%"
+    }
+  ]
+}
