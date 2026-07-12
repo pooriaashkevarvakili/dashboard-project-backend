@@ -16,6 +16,7 @@ import performanceSummaryTimeline from './data/PerformanceSummaryTimeLine.json'
 import priceChart from './data/priceChart.json'
 import coinInterview from './data/CoinInterview.json'
 import NoteTitle from './data/notes.json'
+import socialData from './data/SocialData.json'
 import walletFooter from './data/walletFooter.json'
 import statsCards from './data/StatCards.json'
 import marketData from './data/marketData.json'
@@ -32,6 +33,10 @@ export class AppController {
   @Get('transactions')
   application(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(transactions);
+  }
+    @Get('socialData')
+  socialData(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(socialData);
   }
    @Get('walletFooter')
   walletFooter(@Res() res: Response): void {

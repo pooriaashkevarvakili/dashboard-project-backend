@@ -1,0 +1,42 @@
+{
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "twitter": {
+        "posts": 12450,
+        "sentiment": 72,
+        "trend": "up"
+      },
+      "telegram": {
+        "members": 89300,
+        "activity": 68,
+        "trend": "up"
+      },
+      "reddit": {
+        "subscribers": 6120000,
+        "posts": 3400,
+        "trend": "neutral"
+      },
+      "github": {
+        "stars": 78900,
+        "commits": 1240,
+        "trend": "up"
+      },
+      "youtube": {
+        "views": 45200000,
+        "videos": 890,
+        "trend": "up"
+      },
+      "discord": {
+        "members": 234000,
+        "online": 34000,
+        "trend": "up"
+      },
+      "medium": {
+        "followers": 127000,
+        "posts": 340,
+        "trend": "neutral"
+      }
+    }
+  ]
+}
