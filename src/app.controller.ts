@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, HttpStatus, Param, Res } from '@nestjs/common';
+import { Controller, Delete, Get, HttpStatus, Param, Query, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { join } from 'path';
 import type { Response } from 'express';
@@ -74,6 +74,43 @@ getPriceChart() {
     ],
   };
 }
+
+ @Get('ChartCoinData')
+  ChartCoinData(@Query('timeframe') timeframe: string = '1M') {
+    const now = Date.now();
+    const dayMs = 86400000;
+
+    let days = 30;
+
+    switch (timeframe) {
+      case '1W':
+        days = 7;
+        break;
+      case '1M':
+        days = 30;
+        break;
+      case '3M':
+        days = 90;
+        break;
+      case '1Y':
+        days = 365;
+        break;
+      case 'ALL':
+        days = 730;
+        break;
+    }
+
+    const data = Array.from({ length: days }, (_, i) => ({
+      x: now - (days - 1 - i) * dayMs,
+      y: 30000 + Math.floor(Math.random() * 15000),
+    }));
+
+    return {
+      success: true,
+      data,
+    };
+  }
+
   @Get('transactions')
   application(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(transactions);
