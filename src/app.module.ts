@@ -28,6 +28,7 @@ import { ExternalWalletstableModule } from './external-walletstable/external-wal
 import { ThrottlerModule } from '@nestjs/throttler';
 import { FilterTransactionModule } from './filter-transaction/filter-transaction.module';
 import { CryptoTablesModule } from './crypto-tables/crypto-tables.module';
+import { CryptomarketModule } from './cryptomarket/cryptomarket.module';
 
 @Module({
   imports: [
@@ -116,6 +117,8 @@ TypeOrmModule.forFeature([NoteEntity]),
     FilterTransactionModule,
 
     CryptoTablesModule,
+
+    CryptomarketModule,
   ],
 
   controllers: [AppController, NotesController],
