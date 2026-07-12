@@ -93,30 +93,36 @@ private async seed(): Promise<void> {
   findOne(id: number) {
     return `This action returns a #${id} filterTransaction`;
   }
- async findAll() {
-    const transactions = await this.transactionRepository.find({
-      order: {
-        id: 'ASC',
-      },
-    });
+async findAll(page = 1, limit = 10) {
+  const [transactions, total] = await this.transactionRepository.findAndCount({
+    skip: (page - 1) * limit,
+    take: limit,
+    order: {
+      id: 'ASC',
+    },
+  });
 
-    return {
-      message: 'پیام با موفقیت انجام شد',
-      data: transactions.map((item) => ({
-        key: item.id,
-        coin: item.coin,
-        marketCap: item.marketCap,
-
-        price: item.price,
-        volume: item.volume,
-
-        circulatingSupply: item.circulatingSupply,
-        ath:item.ath,
-        atl:item.alt,
-        change: item.change,
-      })),
-    };
-  }
+  return {
+    message: 'اطلاعات با موفقیت دریافت شد',
+    data: transactions.map((item) => ({
+      id: item.id,
+      coin: item.coin,
+      marketCap: item.marketCap,
+      price: item.price,
+      volume: item.volume,
+      circulatingSupply: item.circulatingSupply,
+      ath: item.ath,
+      atl: item.alt, // یا اگر Entity را اصلاح کردی: item.atl
+      change: item.change,
+    })),
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
+}
  
 
   remove(id: number) {

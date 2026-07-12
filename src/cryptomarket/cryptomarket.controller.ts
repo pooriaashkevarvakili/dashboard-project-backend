@@ -7,6 +7,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CryptomarketService } from './cryptomarket.service';
 import { CreateCryptomarketDto } from './dto/create-cryptomarket.dto';
@@ -21,8 +22,14 @@ export class CryptomarketController {
   }
 
   @Get('/all')
-  findAll() {
-    return this.cryptoMarketService.findAll();
+  findAll(
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '10',
+  ) {
+    return this.cryptoMarketService.findAll(
+      Number(page),
+      Number(limit),
+    );
   }
 
   @Get(':id')
