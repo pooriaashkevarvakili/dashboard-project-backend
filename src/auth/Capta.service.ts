@@ -16,7 +16,6 @@ export class CaptchaService {
       },
     );
 
-    console.log('Google Response:', data);
 
     if (!data.success) {
       throw new BadRequestException({
