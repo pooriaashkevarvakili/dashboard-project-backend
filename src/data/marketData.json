@@ -1,0 +1,20 @@
+{
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "price": 67234.5,
+      "change24h": 3.42,
+      "marketCap": 1320000000000,
+      "volume24h": 28400000000,
+      "circulatingSupply": 19600000,
+      "totalSupply": 21000000,
+      "maxSupply": 21000000,
+      "ath": 68900.0,
+      "athDate": "2021-11-10",
+      "atl": 67.81,
+      "atlDate": "2013-07-06",
+      "dominance": 48.2,
+      "rank": 1
+    }
+  ]
+}

@@ -18,6 +18,7 @@ import coinInterview from './data/CoinInterview.json'
 import NoteTitle from './data/notes.json'
 import walletFooter from './data/walletFooter.json'
 import statsCards from './data/StatCards.json'
+import marketData from './data/marketData.json'
 import currencyExchange from './data/CurrencyExchange.json'
 import chartSeriesCanslick from './data/ChartSeriesCanslick.json'
 @Controller()
@@ -86,6 +87,10 @@ async NoteTitleAll() {
     @Get('recentTransactions')
   recentTransactions(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(recentTransactions);
+  }
+     @Get('marketData')
+  marketData(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(marketData);
   }
    @Get('MarketStatus')
   MarketStatus(@Res() res: Response): void {
