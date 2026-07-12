@@ -20,6 +20,7 @@ import socialData from './data/SocialData.json'
 import walletFooter from './data/walletFooter.json'
 import statsCards from './data/StatCards.json'
 import marketData from './data/marketData.json'
+import ReactionData from './data/ReactionData.json'
 import currencyExchange from './data/CurrencyExchange.json'
 import chartSeriesCanslick from './data/ChartSeriesCanslick.json'
 @Controller()
@@ -33,6 +34,10 @@ export class AppController {
   @Get('transactions')
   application(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(transactions);
+  }
+    @Get('reactionData')
+  reactionData(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(ReactionData);
   }
     @Get('socialData')
   socialData(@Res() res: Response): void {
