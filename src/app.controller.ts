@@ -25,6 +25,11 @@ import holdersTabAddress from './data/holdersTabAddress.json'
 import ReactionData from './data/ReactionData.json'
 import currencyExchange from './data/CurrencyExchange.json'
 import chartSeriesCanslick from './data/ChartSeriesCanslick.json'
+type ChartData = {
+  key: number;
+  priceChart: number;
+};
+
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -74,7 +79,53 @@ getPriceChart() {
     ],
   };
 }
+@Get('chartSeriesDataNumber')
+chartSeriesDataNumber(@Query('chartSeriesData') chartSeriesData: string = '1W') {
+  let data: ChartData[] = [];
 
+  switch (chartSeriesData) {
+    case '1D':
+      data = [
+        { key: 1, priceChart: 38500 },
+        { key: 2, priceChart: 38800 },
+        { key: 3, priceChart: 39200 },
+        { key: 4, priceChart: 38900 },
+        { key: 5, priceChart: 39500 },
+      ];
+      break;
+
+    case '1W':
+      data = [
+        { key: 1, priceChart: 22000 },
+        { key: 2, priceChart: 25000 },
+        { key: 3, priceChart: 24000 },
+        { key: 4, priceChart: 28000 },
+        { key: 5, priceChart: 32000 },
+        { key: 6, priceChart: 34000 },
+        { key: 7, priceChart: 39000 },
+      ];
+      break;
+
+    case '1M':
+      data = Array.from({ length: 30 }, (_, i) => ({
+        key: i + 1,
+        priceChart: 25000 + Math.floor(Math.random() * 15000),
+      }));
+      break;
+
+    case '1Y':
+      data = Array.from({ length: 12 }, (_, i) => ({
+        key: i + 1,
+        priceChart: 20000 + Math.floor(Math.random() * 30000),
+      }));
+      break;
+  }
+
+  return {
+    message: 'پیام با موفقیت انجام شد',
+    data,
+  };
+}
  @Get('ChartCoinData')
   ChartCoinData(@Query('timeframe') timeframe: string = '1M') {
     const now = Date.now();
