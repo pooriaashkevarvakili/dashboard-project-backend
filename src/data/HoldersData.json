@@ -1,0 +1,25 @@
+{
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "label": "Whales (>1k BTC)",
+      "value": 42,
+      "color": "#f7931a"
+    },
+    {
+      "label": "Institutions (100-1k BTC)",
+      "value": 28,
+      "color": "#ffb347"
+    },
+    {
+      "label": "Retail (10-100 BTC)",
+      "value": 18,
+      "color": "#ffd700"
+    },
+    {
+      "label": "Small Holders (<10 BTC)",
+      "value": 12,
+      "color": "#ffecb3"
+    }
+  ]
+}
