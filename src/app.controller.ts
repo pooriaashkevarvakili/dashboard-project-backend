@@ -80,10 +80,10 @@ getPriceChart() {
   };
 }
 @Get('chartSeriesDataNumber')
-chartSeriesDataNumber(@Query('chartSeriesData') chartSeriesData: string = '1W') {
+chartSeriesDataNumber(@Query('timeframe') timeframe: string = '1W') {
   let data: ChartData[] = [];
 
-  switch (chartSeriesData) {
+  switch (timeframe) {
     case '1D':
       data = [
         { key: 1, priceChart: 38500 },
