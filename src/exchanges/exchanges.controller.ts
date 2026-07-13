@@ -12,7 +12,7 @@ import {
 import { ExchangesService } from './exchanges.service';
 import { CreateExchangeDto } from './dto/create-exchange.dto';
 
-@Controller('exchangeMarket')
+@Controller('exchange')
 export class ExchangesController {
   constructor(private readonly exchangesService: ExchangesService) {}
 
