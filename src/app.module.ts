@@ -30,6 +30,7 @@ import { FilterTransactionModule } from './filter-transaction/filter-transaction
 import { CryptoTablesModule } from './crypto-tables/crypto-tables.module';
 import { CryptomarketModule } from './cryptomarket/cryptomarket.module';
 import { ChartQueryController } from './chart-query/chart-query.controller';
+import { ExchangesModule } from './exchanges/exchanges.module';
 
 @Module({
   imports: [
@@ -120,6 +121,8 @@ TypeOrmModule.forFeature([NoteEntity]),
     CryptoTablesModule,
 
     CryptomarketModule,
+
+    ExchangesModule,
   ],
 
   controllers: [AppController, NotesController, ChartQueryController],
