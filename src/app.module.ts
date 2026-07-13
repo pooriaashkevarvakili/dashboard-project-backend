@@ -31,6 +31,7 @@ import { CryptoTablesModule } from './crypto-tables/crypto-tables.module';
 import { CryptomarketModule } from './cryptomarket/cryptomarket.module';
 import { ChartQueryController } from './chart-query/chart-query.controller';
 import { ExchangesModule } from './exchanges/exchanges.module';
+import { HistoricalModule } from './historical/historical.module';
 
 @Module({
   imports: [
@@ -53,7 +54,7 @@ ThrottlerModule.forRoot([
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
- url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
+url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
         type: 'postgres',
         host: config.get<string>('DB_HOST'),
         port: Number(config.get<string>('DB_PORT')),
@@ -123,6 +124,8 @@ TypeOrmModule.forFeature([NoteEntity]),
     CryptomarketModule,
 
     ExchangesModule,
+
+    HistoricalModule,
   ],
 
   controllers: [AppController, NotesController, ChartQueryController],
