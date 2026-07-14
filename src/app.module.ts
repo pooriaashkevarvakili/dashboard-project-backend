@@ -69,6 +69,7 @@ import { NewsModule } from './news/news.module';
     }),
     TypeOrmModule.forFeature([NoteEntity]),
     // Logger
+    
     LoggerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
