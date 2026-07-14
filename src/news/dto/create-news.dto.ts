@@ -1,37 +1,23 @@
-import { Type } from 'class-transformer';
-import {
-  IsBoolean,
-  IsEnum,
-  IsInt,
-  IsOptional,
-  IsString,
-  Min,
-} from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional, IsString, IsUrl } from 'class-validator';
 import { NewsCategory } from '../news.enum';
 
-export class GetNewsDto {
-  @IsOptional()
-  @IsEnum(NewsCategory)
-  category?: NewsCategory;
-
-  @IsOptional()
+export class CreateNewsDto {
   @IsString()
-  search?: string;
+  title!: string;
+
+  @IsString()
+  summary!: string;
+
+  @IsEnum(NewsCategory)
+  category!: NewsCategory;
+
+  @IsString()
+  source!: string;
+
+  @IsUrl()
+  url!: string;
 
   @IsOptional()
-  @Type(() => Boolean)
   @IsBoolean()
   trending?: boolean;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  page: number = 1;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  limit: number = 10;
 }

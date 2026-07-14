@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { NewsEntity } from './entities/news.entity';
-import { GetNewsDto } from './dto/create-news.dto';
+import { CreateNewsDto } from './dto/create-news.dto';
+import { GetNewsDto } from './dto/get-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 
 @Injectable()
@@ -13,58 +14,48 @@ export class NewsService {
     private readonly newsRepository: Repository<NewsEntity>,
   ) {}
 
-  async create(createNewsDto: GetNewsDto) {
+  async create(createNewsDto: CreateNewsDto) {
     const news = this.newsRepository.create(createNewsDto);
     return await this.newsRepository.save(news);
   }
 
-  async findAll(query: GetNewsDto) {
-    const { category, search, trending, page = 1, limit = 10 } = query;
+ async findAll(query: GetNewsDto) {
+  console.log('NewsService.findAll called');
 
-    const qb = this.newsRepository.createQueryBuilder('news');
+  const { category, search, trending, page = 1, limit = 10 } = query;
 
-    if (category) {
-      qb.andWhere('news.category = :category', { category });
-    }
+  const qb = this.newsRepository.createQueryBuilder('news');
 
-    if (search) {
-      qb.andWhere(
-        '(news.title ILIKE :search OR news.summary ILIKE :search)',
-        { search: `%${search}%` },
-      );
-    }
+  // ...
 
-    if (trending !== undefined) {
-      qb.andWhere('news.trending = :trending', { trending });
-    }
+  const [items, total] = await qb.getManyAndCount();
 
-    qb.orderBy('news.createdAt', 'DESC');
+  return {
+    data: items,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  };
+}
+async findOne(id: number) {
+  console.log('Requested id:', id);
 
-    qb.skip((page - 1) * limit);
-    qb.take(limit);
+  const all = await this.newsRepository.find();
+  console.log('All news:', all);
 
-    const [items, total] = await qb.getManyAndCount();
+  const news = await this.newsRepository.findOne({
+    where: { id },
+  });
 
-    return {
-      data: items,
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit),
-    };
+  console.log('Found news:', news);
+
+  if (!news) {
+    throw new NotFoundException('News not found');
   }
 
-  async findOne(id: number) {
-    const news = await this.newsRepository.findOne({
-      where: { id },
-    });
-
-    if (!news) {
-      throw new NotFoundException('News not found');
-    }
-
-    return news;
-  }
+  return news;
+}
 
   async update(id: number, updateNewsDto: UpdateNewsDto) {
     const news = await this.findOne(id);

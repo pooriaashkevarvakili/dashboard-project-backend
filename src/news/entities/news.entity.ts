@@ -8,13 +8,18 @@ import { NewsCategory } from '../news.enum';
 
 @Entity('news')
 export class NewsEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id!: number;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 255,
+  })
   title!: string;
 
-  @Column('text')
+  @Column({
+    type: 'text',
+  })
   summary!: string;
 
   @Column({
@@ -23,15 +28,26 @@ export class NewsEntity {
   })
   category!: NewsCategory;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 255,
+  })
   source!: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 500,
+  })
   url!: string;
 
-  @Column({ default: false })
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
   trending!: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
   createdAt!: Date;
 }
