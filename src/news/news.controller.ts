@@ -30,9 +30,11 @@ export class NewsController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.newsService.findOne(id);
-  }
+findOne(@Param('id', ParseIntPipe) id: number) {
+  console.log('CONTROLLER ID:', id);
+
+  return this.newsService.findOne(id);
+}
 
   @Patch(':id')
   update(
