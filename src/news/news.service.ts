@@ -19,42 +19,42 @@ export class NewsService {
   }
 
   async findAll(query: GetNewsDto) {
-  const { category, search, trending, page, limit } = query;
+    const { category, search, trending, page = 1, limit = 10 } = query;
 
-  const qb = this.newsRepository.createQueryBuilder('news');
+    const qb = this.newsRepository.createQueryBuilder('news');
 
-  if (category) {
-    qb.andWhere('news.category = :category', { category });
+    if (category) {
+      qb.andWhere('news.category = :category', { category });
+    }
+
+    if (search) {
+      qb.andWhere(
+        '(news.title ILIKE :search OR news.summary ILIKE :search)',
+        { search: `%${search}%` },
+      );
+    }
+
+    if (trending !== undefined) {
+      qb.andWhere('news.trending = :trending', { trending });
+    }
+
+    qb.orderBy('news.createdAt', 'DESC');
+
+    qb.skip((page - 1) * limit);
+    qb.take(limit);
+
+    const [items, total] = await qb.getManyAndCount();
+
+    return {
+      data: items,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
-  if (search) {
-    qb.andWhere(
-      '(news.title ILIKE :search OR news.summary ILIKE :search)',
-      { search: `%${search}%` },
-    );
-  }
-
-  if (trending !== undefined) {
-    qb.andWhere('news.trending = :trending', { trending });
-  }
-
-  qb.orderBy('news.createdAt', 'DESC');
-
-  qb.skip((page - 1) * limit);
-  qb.take(limit);
-
-  const [items, total] = await qb.getManyAndCount();
-
-  return {
-    data: items,
-    total,
-    page,
-    limit,
-    totalPages: Math.ceil(total / limit),
-  };
-}
-
-  async findOne(id: string) {
+  async findOne(id: number) {
     const news = await this.newsRepository.findOne({
       where: { id },
     });
@@ -66,7 +66,7 @@ export class NewsService {
     return news;
   }
 
-  async update(id: string, updateNewsDto: UpdateNewsDto) {
+  async update(id: number, updateNewsDto: UpdateNewsDto) {
     const news = await this.findOne(id);
 
     Object.assign(news, updateNewsDto);
@@ -74,7 +74,7 @@ export class NewsService {
     return await this.newsRepository.save(news);
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     const news = await this.findOne(id);
 
     await this.newsRepository.remove(news);

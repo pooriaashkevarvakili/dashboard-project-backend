@@ -4,7 +4,7 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -29,24 +29,20 @@ export class NewsController {
   }
 
   @Get(':id')
-  findOne(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.newsService.findOne(id);
   }
 
   @Patch(':id')
   update(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateNewsDto: UpdateNewsDto,
   ) {
     return this.newsService.update(id, updateNewsDto);
   }
 
   @Delete(':id')
-  remove(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.newsService.remove(id);
   }
 }
