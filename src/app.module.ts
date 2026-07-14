@@ -32,6 +32,7 @@ import { CryptomarketModule } from './cryptomarket/cryptomarket.module';
 import { ChartQueryController } from './chart-query/chart-query.controller';
 import { ExchangesModule } from './exchanges/exchanges.module';
 import { HistoricalModule } from './historical/historical.module';
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -40,12 +41,12 @@ import { HistoricalModule } from './historical/historical.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-ThrottlerModule.forRoot([
-  {
-    ttl:10000,
-    limit:6
-  }
-]),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 10000,
+        limit: 6,
+      },
+    ]),
     // JWT
     JwtModule.registerAsync(jwtConfig.asProvider()),
 
@@ -54,7 +55,7 @@ ThrottlerModule.forRoot([
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
+        //url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
         type: 'postgres',
         host: config.get<string>('DB_HOST'),
         port: Number(config.get<string>('DB_PORT')),
@@ -64,10 +65,9 @@ url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@d
         autoLoadEntities: true,
         synchronize: true,
         logging: false,
-     
       }),
     }),
-TypeOrmModule.forFeature([NoteEntity]),
+    TypeOrmModule.forFeature([NoteEntity]),
     // Logger
     LoggerModule.forRootAsync({
       imports: [ConfigModule],
@@ -126,9 +126,11 @@ TypeOrmModule.forFeature([NoteEntity]),
     ExchangesModule,
 
     HistoricalModule,
+
+    NewsModule,
   ],
 
   controllers: [AppController, NotesController, ChartQueryController],
-  providers: [AppService,NotesService],
+  providers: [AppService, NotesService],
 })
 export class AppModule {}

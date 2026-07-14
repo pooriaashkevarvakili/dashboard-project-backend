@@ -22,8 +22,8 @@ export class Cryptomarket {
   circulatingSupply!: number;
     @Column('float')
   ath!: number;
-   @Column('float',{nullable: true})
-  alt!: number;
+   @Column('float', { nullable: true })
+atl!: number;
   @Column('simple-array', { nullable: true })
   change!: number[];
 }

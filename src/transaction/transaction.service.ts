@@ -6,78 +6,15 @@ import { Transaction } from './entities/transaction.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 
 @Injectable()
-export class TransactionService implements OnModuleInit {
+export class TransactionService {
   constructor(
     @InjectRepository(Transaction)
     private readonly transactionRepository: Repository<Transaction>,
   ) {}
 
-  async onModuleInit() {
-    await this.seed();
-  }
 
-  private async seed() {
-    const count = await this.transactionRepository.count();
 
-    if (count > 0) return;
 
-    await this.transactionRepository.save([
-      {
-        coin: 'BTC',
-        type: 'خرید',
-        amount: '0.25',
-        price: '$108,450',
-      },
-      {
-        coin: 'ETH',
-        type: 'فروش',
-        amount: '1.5',
-        price: '$3,520',
-      },
-      {
-        coin: 'ETH',
-        type: 'فروش',
-        amount: '1.5',
-        price: '$3,520',
-      },
-      {
-        coin: 'ETH',
-        type: 'فروش',
-        amount: '1.5',
-        price: '$3,520',
-      },
-      {
-        coin: 'ETH',
-        type: 'فروش',
-        amount: '1.5',
-        price: '$3,520',
-      },
-      {
-        coin: 'ETH',
-        type: 'فروش',
-        amount: '1.5',
-        price: '$3,520',
-      },
-      {
-        coin: 'ETH',
-        type: 'فروش',
-        amount: '1.5',
-        price: '$3,520',
-      },
-      {
-        coin: 'ETH',
-        type: 'فروش',
-        amount: '1.5',
-        price: '$3,520',
-      },
-      {
-        coin: 'ETH',
-        type: 'فروش',
-        amount: '1.5',
-        price: '$3,520',
-      },
-    ]);
-  }
 
   async create(dto: CreateTransactionDto) {
     const transaction = this.transactionRepository.create(dto);

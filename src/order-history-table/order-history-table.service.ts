@@ -6,89 +6,13 @@ import { OrderHistoryTable } from './entities/order-history-table.entity';
 import { CreateOrderHistoryDto } from './dto/create-order-history-table.dto';
 
 @Injectable()
-export class OrderHistoryTableService implements OnModuleInit {
+export class OrderHistoryTableService  {
   constructor(
     @InjectRepository(OrderHistoryTable)
     private readonly orderHistoryTable: Repository<OrderHistoryTable>,
   ) {}
 
-  async onModuleInit() {
-    await this.seed();
-  }
 
-  private async seed() {
-    const count = await this.orderHistoryTable.count();
-
-    if (count > 0) {
-      return;
-    }
-
-    const data = [
-      {
-        name: '#ORD-001',
-          type: 'Buy',
-
-        price: 64200,
-        amount: 0.85,
-        total: 54570,
-        status: true,
-        time: '2026-07-03 14:32:21',
-      },
-      {
-        name: '#ORD-002',
-
-        type: 'Sell',
-        price: 65800,
-        amount: 0.42,
-        total: 27636,
-        status: false,
-        time: '2026-07-03 12:15:07',
-      },
-      {
-        name: '#ORD-003',
-
-        type: 'Buy',
-        price: 63500,
-        amount: 1.2,
-        total: 76200,
-        status: true,
-        time: '2026-07-02 22:45:33',
-      },
-      {
-        name: '#ORD-004',
-
-        type: 'Sell',
-        price: 67000,
-        amount: 0.5,
-        total: 33500,
-        status: false,
-        time: '2026-07-02 18:20:11',
-      },
-      {
-        name: '#ORD-005',
-
-        type: 'Buy',
-        price: 62800,
-        amount: 2,
-        total: 125600,
-        status: true,
-        time: '2026-07-02 09:05:42',
-      },
-      {
-        name: '#ORD-006',
-
-        type: 'Buy',
-        price: 65500,
-        amount: 0.3,
-        total: 19650,
-        status: false,
-        time: '2026-07-01 16:55:18',
-      },
-    ];
-
-    const entities = this.orderHistoryTable.create(data);
-    await this.orderHistoryTable.save(entities);
-  }
   async create(dto: CreateOrderHistoryDto) {
     const transaction = this.orderHistoryTable.create(dto);
     return await this.orderHistoryTable.save(transaction);

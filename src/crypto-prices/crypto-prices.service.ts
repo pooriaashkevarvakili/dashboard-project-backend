@@ -6,63 +6,14 @@ import { CryptoPrice } from './entities/crypto-price.entity';
 import { CreateCryptoPriceDto } from './dto/create-crypto-price.dto';
 
 @Injectable()
-export class CryptoPricesService implements OnModuleInit {
+export class CryptoPricesService {
   constructor(
     @InjectRepository(CryptoPrice)
     private readonly CryptoRepository: Repository<CryptoPrice>,
   ) {}
 
-  async onModuleInit() {
-    await this.seed();
-  }
 
-  private async seed() {
-    const count = await this.CryptoRepository.count();
 
-    if (count > 0) return;
-    await this.CryptoRepository.save([
-      {
-        name: 'Bitcoin',
-        symbol: 'BTC',
-        price: 67234.5,
-        change: 2.45,
-        volume: '32.4B',
-        marketCap: '1.32T',
-      },
-      {
-        name: 'Ethereum',
-        symbol: 'ETH',
-        price: 3456.78,
-        change: -1.23,
-        volume: '18.7B',
-        marketCap: '415.6B',
-      },
-      {
-        name: 'Binance Coin',
-        symbol: 'BNB',
-        price: 589.12,
-        change: 0.87,
-        volume: '5.2B',
-        marketCap: '89.3B',
-      },
-      {
-        name: 'Tether',
-        symbol: 'USDT',
-        price: 1,
-        change: 0.01,
-        volume: '68.1B',
-        marketCap: '83.7B',
-      },
-      {
-        name: 'Ripple',
-        symbol: 'XRP',
-        price: 0.6234,
-        change: -0.45,
-        volume: '2.8B',
-        marketCap: '33.9B',
-      },
-    ]);
-  }
 
   async create(dto: CreateCryptoPriceDto) {
     const transaction = this.CryptoRepository.create(dto);
