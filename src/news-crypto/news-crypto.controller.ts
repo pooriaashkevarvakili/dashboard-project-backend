@@ -25,7 +25,6 @@ export class CryptoNewsController {
     return this.newsService.filter(category, source, trending);
   }
 
-  // دریافت یک خبر با شناسه (از طریق Query Parameter)
   @Get('get')
   @ApiOperation({ summary: 'دریافت یک خبر با شناسه (از طریق Query)' })
   @ApiQuery({ name: 'id', required: true, type: Number })
@@ -37,7 +36,6 @@ export class CryptoNewsController {
     return this.newsService.findOne(id);
   }
 
-  // ایجاد خبر جدید
   @Post()
   @ApiOperation({ summary: 'ایجاد خبر جدید' })
   @ApiResponse({ status: 201, description: 'خبر ایجاد شد', type: CryptoNewsEntity })
@@ -56,7 +54,6 @@ export class CryptoNewsController {
     return this.newsService.update(id, updateDto);
   }
 
-  // حذف خبر
   @Delete(':id')
   @ApiOperation({ summary: 'حذف خبر' })
   @ApiResponse({ status: 200, description: 'خبر حذف شد' })

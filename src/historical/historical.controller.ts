@@ -11,7 +11,8 @@ import {
 } from '@nestjs/common';
 import { HistoricalService } from './historical.service';
 import { CreateHistoricalDto } from './dto/create-historical.dto';
-
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {Historical} from './entities/historical.entity'
 @Controller('historical')
 export class HistoricalController {
   constructor(private readonly HistoricalService: HistoricalService) {}
@@ -20,6 +21,9 @@ export class HistoricalController {
   create(@Body() dto: CreateHistoricalDto) {
     return this.HistoricalService.create(dto);
   }
+@ApiOperation({ summary: 'هیزتوریکال    داده شد' })
+  @ApiResponse({ status: 200, description: 'هیزتوریکال جدید داده شد', type: Historical })
+  @ApiResponse({ status: 404, description: ' هیزتوریکال یافت نشد' })
 
   @Get('/all')
   findAll(

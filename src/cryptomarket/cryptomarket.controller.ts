@@ -9,9 +9,10 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import {ApiOperation,ApiQuery,ApiResponse} from '@nestjs/swagger'
 import { CryptomarketService } from './cryptomarket.service';
 import { CreateCryptomarketDto } from './dto/create-cryptomarket.dto';
-
+import {Cryptomarket} from './entities/cryptomarket.entity'
 @Controller('cryptoMarket')
 export class CryptomarketController {
   constructor(private readonly cryptoMarketService: CryptomarketService) {}
@@ -20,6 +21,9 @@ export class CryptomarketController {
   create(@Body() dto: CreateCryptomarketDto) {
     return this.cryptoMarketService.create(dto);
   }
+@ApiOperation({ summary: 'مارکت جدید خبر داده شد' })
+  @ApiResponse({ status: 200, description: 'مارکت خبر', type: Cryptomarket })
+  @ApiResponse({ status: 404, description: 'مارکت خبر یافت نشد' })
 
   @Get('/all')
   findAll(
