@@ -26,6 +26,7 @@ export class NewsService implements OnModuleInit {
       return;
     }
 
+    // ۷ خبر کاملاً متنوع (بدون تکرار)
     const initialNews = [
       {
         title: 'بیت‌کوین از مرز ۷۲,۰۰۰ دلار عبور کرد؛ ورود نهادی‌ها به اوج رسید',
@@ -93,7 +94,6 @@ export class NewsService implements OnModuleInit {
     ];
 
     for (const news of initialNews) {
-      // ✅ رفع خطای TypeScript با `as any`
       const entity = this.newsRepository.create(news as any);
       await this.newsRepository.save(entity);
     }

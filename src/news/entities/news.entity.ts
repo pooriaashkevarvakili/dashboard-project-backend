@@ -8,46 +8,27 @@ import { NewsCategory } from '../news.enum';
 
 @Entity('newsCrypto')
 export class newsCrypto {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({
-    type: 'varchar',
-    length: 255,
-  })
+  @Column()
   title!: string;
 
-  @Column({
-    type: 'text',
-  })
+  @Column()
   summary!: string;
 
-  @Column({
-    type: 'enum',
-    enum: NewsCategory,
-  })
-  category!: NewsCategory;
+  @Column()
+  category!: string;
 
-  @Column({
-    type: 'varchar',
-    length: 255,
-  })
+  @Column()
   source!: string;
 
-  @Column({
-    type: 'varchar',
-    length: 500,
-  })
-  url!: string;
+  @Column({ type: 'bigint' })
+  timestamp!: number;
 
-  @Column({
-    type: 'boolean',
-    default: false,
-  })
+  @Column({ default: false })
   trending!: boolean;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-  })
-  createdAt!: Date;
+  @Column()
+  url!: string;
 }
