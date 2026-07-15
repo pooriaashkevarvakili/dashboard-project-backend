@@ -9,6 +9,8 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 import { NewsService } from './news.service';
 import { CreateNewsDto } from './dto/create-news.dto';
@@ -18,10 +20,13 @@ import { newsCrypto } from './entities/news.entity';
 
 @Controller('news')
 export class NewsController {
-  constructor(private readonly newsService: NewsService) {}
+  constructor(
+    private readonly newsService: NewsService,
+    @InjectDataSource() private readonly dataSource: DataSource, // برای دسترسی به QueryRunner
+  ) {}
 
   // ================================================================
-  //  مسیرهای ثابت (ابتدا تعریف شوند تا با :id اشتباه نشوند)
+  //  مسیرهای ثابت
   // ================================================================
 
   @Post()
@@ -42,16 +47,18 @@ export class NewsController {
 
   @Post('reset')
   async resetAndSeed() {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
     try {
-      console.log('🔄 شروع ریست دیتابیس...');
+      console.log('🔄 شروع ریست دیتابیس با ریست شناسه...');
 
-      const repository = (this.newsService as any).newsRepository;
+      // 1. پاک کردن و ریست شمارنده
+      await queryRunner.query(`TRUNCATE TABLE "newsCrypto" RESTART IDENTITY CASCADE;`);
+      console.log('✅ جدول خالی و شمارنده ریست شد.');
 
-      // ۱. پاک کردن همه‌ی رکوردها
-      await repository.clear();
-      console.log('✅ همه‌ی رکوردها پاک شدند.');
-
-      // ۲. درج ۷ خبر جدید
+      // 2. درج ۷ خبر جدید
       const initialNews = [
         {
           title: 'بیت‌کوین از مرز ۷۲,۰۰۰ دلار عبور کرد؛ ورود نهادی‌ها به اوج رسید',
@@ -118,15 +125,18 @@ export class NewsController {
         },
       ];
 
+      const repository = this.dataSource.getRepository(newsCrypto);
       const results: newsCrypto[] = [];
+
       for (const news of initialNews) {
         const entity = repository.create(news);
         const saved = await repository.save(entity);
         results.push(saved);
       }
 
-      const finalCount = await repository.count();
+      await queryRunner.commitTransaction();
 
+      const finalCount = await repository.count();
       console.log(`✅ ریست و Seed با موفقیت انجام شد. ${finalCount} خبر درج شد.`);
 
       return {
@@ -136,6 +146,7 @@ export class NewsController {
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
+      await queryRunner.rollbackTransaction();
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.error('❌ خطا در ریست دیتابیس:', errorMessage);
       return {
@@ -143,6 +154,8 @@ export class NewsController {
         error: errorMessage,
         timestamp: new Date().toISOString(),
       };
+    } finally {
+      await queryRunner.release();
     }
   }
 
