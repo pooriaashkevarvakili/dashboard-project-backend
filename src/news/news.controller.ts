@@ -14,7 +14,7 @@ import { NewsService } from './news.service';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { GetNewsDto } from './dto/get-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
-import { newsCrypto } from './entities/news.entity'; // ✅ اضافه کردن import Entity
+import { newsCrypto } from './entities/news.entity';
 
 @Controller('news')
 export class NewsController {
@@ -54,13 +54,19 @@ export class NewsController {
     return this.newsService.remove(id);
   }
 
-  // ========== Force Seed با لاگ کامل ==========
-  @Post('force-seed')
-  async forceSeed() {
+  // ========== ریست کامل دیتابیس (پاک کردن و Seed مجدد) ==========
+  @Post('reset')
+  async resetAndSeed() {
     try {
-      console.log('🚀 Force seed started...');
+      console.log('🔄 شروع ریست دیتابیس...');
 
-      // ۷ خبر کامل
+      const repository = (this.newsService as any).newsRepository;
+
+      // ۱. پاک کردن همه‌ی رکوردها
+      await repository.clear();
+      console.log('✅ همه‌ی رکوردها پاک شدند.');
+
+      // ۲. درج ۷ خبر جدید
       const initialNews = [
         {
           title: 'بیت‌کوین از مرز ۷۲,۰۰۰ دلار عبور کرد؛ ورود نهادی‌ها به اوج رسید',
@@ -127,46 +133,28 @@ export class NewsController {
         },
       ];
 
-      console.log(`📝 ${initialNews.length} خبر آماده درج است.`);
-
-      // دسترسی به repository
-      const repository = (this.newsService as any).newsRepository;
-      if (!repository) {
-        throw new Error('newsRepository در دسترس نیست!');
+      const results: newsCrypto[] = [];
+      for (const news of initialNews) {
+        const entity = repository.create(news);
+        const saved = await repository.save(entity);
+        results.push(saved);
       }
 
-      // درج داده‌ها یکی‌یکی
-      const results: newsCrypto[] = []; // ✅ نوع‌دهی صریح با Entity
-
-      for (let i = 0; i < initialNews.length; i++) {
-        const news = initialNews[i];
-        console.log(`🔄 در حال درج خبر ${i + 1}:`, news.title);
-        try {
-          const entity = repository.create(news);
-          const saved = await repository.save(entity);
-          results.push(saved);
-          console.log(`✅ خبر ${i + 1} با id ${saved.id} ذخیره شد.`);
-        } catch (singleError) {
-          console.error(`❌ خطا در خبر ${i + 1}:`, singleError);
-          // ادامه بده تا بقیه خبر‌ها هم درج شوند
-        }
-      }
-
-      // بررسی نهایی
       const finalCount = await repository.count();
-      console.log(`📊 تعداد نهایی رکوردها: ${finalCount}`);
+
+      console.log(`✅ ریست و Seed با موفقیت انجام شد. ${finalCount} خبر درج شد.`);
 
       return {
-        message: `${results.length} خبر با موفقیت درج شد.`,
+        message: `دیتابیس ریست شد و ${results.length} خبر جدید درج گردید.`,
         totalInDatabase: finalCount,
         data: results,
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error('❌ خطای کلی در force-seed:', errorMessage);
+      console.error('❌ خطا در ریست دیتابیس:', errorMessage);
       return {
-        message: 'خطا در درج داده‌ها',
+        message: 'خطا در ریست دیتابیس',
         error: errorMessage,
         timestamp: new Date().toISOString(),
       };
