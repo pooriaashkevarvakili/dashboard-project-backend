@@ -25,7 +25,8 @@ export class NewsService implements OnApplicationBootstrap {
     await this.seedInitialData();
   }
 
-  public async seedInitialData() {
+  // ====== متد Seed با بازگرداندن نتیجه و خطا ======
+  public async seedInitialData(): Promise<{ success: boolean; message: string; count?: number }> {
     console.log('🚀 شروع Seed...');
     try {
       const count = await this.newsRepository.count();
@@ -35,7 +36,7 @@ export class NewsService implements OnApplicationBootstrap {
         const sample = await this.newsRepository.findOne({ where: {} });
         if (sample && sample.title && sample.title.trim().length > 0) {
           console.log('✅ داده‌ها معتبر هستند. تعداد:', count);
-          return;
+          return { success: true, message: 'داده‌ها از قبل معتبر هستند.', count };
         } else {
           console.log('⚠️ داده‌های موجود نامعتبر هستند. پاک کردن...');
           await this.newsRepository.clear();
@@ -43,7 +44,7 @@ export class NewsService implements OnApplicationBootstrap {
         }
       }
 
-      // ✅ ۷ خبر کامل - این آرایه نباید خالی باشد
+      // آرایه ۷ خبر
       const initialNews = [
         {
           title: 'بیت‌کوین از مرز ۷۲,۰۰۰ دلار عبور کرد؛ ورود نهادی‌ها به اوج رسید',
@@ -112,20 +113,25 @@ export class NewsService implements OnApplicationBootstrap {
 
       console.log(`📝 ${initialNews.length} خبر برای درج آماده شده است.`);
 
-      if (initialNews.length === 0) {
-        console.error('❌ خطا: آرایه initialNews خالی است!');
-        return;
-      }
-
-      // درج داده‌ها با insert (دسته‌جمعی)
-      await this.newsRepository.insert(initialNews as any[]);
+      // درج با insert (دسته‌جمعی)
+      const insertResult = await this.newsRepository.insert(initialNews as any[]);
+      console.log('✅ نتیجه insert:', insertResult);
 
       const newCount = await this.newsRepository.count();
       console.log(`✅ Seed با موفقیت انجام شد. ${newCount} خبر درج شد.`);
+
+      return { success: true, message: `Seed موفق. ${newCount} خبر درج شد.`, count: newCount };
     } catch (error) {
-      console.error('❌ خطا در Seed:', this.getErrorMessage(error));
-      throw error;
+      const errorMsg = this.getErrorMessage(error);
+      console.error('❌ خطا در Seed:', errorMsg);
+      // خطا را دوباره پرتاب می‌کنیم تا در پاسخ API نمایش داده شود
+      throw new Error(`Seed failed: ${errorMsg}`);
     }
+  }
+
+  // ====== شمارش رکوردها ======
+  async getCount(): Promise<number> {
+    return this.newsRepository.count();
   }
 
   // ==================== متدهای CRUD ====================
