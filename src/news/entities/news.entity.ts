@@ -9,8 +9,8 @@ export class newsCrypto {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  title!: string;
+@Column({ default: 'بدون عنوان' })
+title!: string;
 
   @Column()
   summary!: string;
