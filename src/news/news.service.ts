@@ -14,7 +14,6 @@ export class NewsService implements OnApplicationBootstrap {
     private readonly newsRepository: Repository<newsCrypto>,
   ) {}
 
-  // ========== تابع کمکی برای دریافت پیام خطا ==========
   private getErrorMessage(error: unknown): string {
     if (error instanceof Error) {
       return error.message;
@@ -22,30 +21,29 @@ export class NewsService implements OnApplicationBootstrap {
     return String(error);
   }
 
-  // ========== اجرا بعد از اتصال کامل دیتابیس ==========
   async onApplicationBootstrap() {
     await this.seedInitialData();
   }
 
-  // ========== Seed با بازنویسی داده‌های نامعتبر ==========
   public async seedInitialData() {
+    console.log('🚀 شروع Seed...');
     try {
       const count = await this.newsRepository.count();
+      console.log(`📊 تعداد رکوردهای موجود: ${count}`);
 
-      // بررسی وجود داده‌های معتبر
       if (count > 0) {
         const sample = await this.newsRepository.findOne({ where: {} });
         if (sample && sample.title && sample.title.trim().length > 0) {
           console.log('✅ داده‌ها معتبر هستند. تعداد:', count);
           return;
         } else {
-          console.log('⚠️ داده‌های موجود نامعتبر هستند. پاک کردن و جایگزینی...');
+          console.log('⚠️ داده‌های موجود نامعتبر هستند. پاک کردن...');
           await this.newsRepository.clear();
           console.log('✅ جدول خالی شد.');
         }
       }
 
-      // ۷ خبر متنوع
+      // ✅ ۷ خبر کامل - این آرایه نباید خالی باشد
       const initialNews = [
         {
           title: 'بیت‌کوین از مرز ۷۲,۰۰۰ دلار عبور کرد؛ ورود نهادی‌ها به اوج رسید',
@@ -112,16 +110,19 @@ export class NewsService implements OnApplicationBootstrap {
         },
       ];
 
-      // درج داده‌ها
-      for (const news of initialNews) {
-        const entity = this.newsRepository.create(news as any);
-        await this.newsRepository.save(entity);
+      console.log(`📝 ${initialNews.length} خبر برای درج آماده شده است.`);
+
+      if (initialNews.length === 0) {
+        console.error('❌ خطا: آرایه initialNews خالی است!');
+        return;
       }
+
+      // درج داده‌ها با insert (دسته‌جمعی)
+      await this.newsRepository.insert(initialNews as any[]);
 
       const newCount = await this.newsRepository.count();
       console.log(`✅ Seed با موفقیت انجام شد. ${newCount} خبر درج شد.`);
     } catch (error) {
-      // ✅ استفاده از تابع کمکی برای دریافت پیام خطا
       console.error('❌ خطا در Seed:', this.getErrorMessage(error));
       throw error;
     }
