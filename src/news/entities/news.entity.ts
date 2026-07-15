@@ -2,9 +2,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  CreateDateColumn,
 } from 'typeorm';
-import { NewsCategory } from '../news.enum';
 
 @Entity('newsCrypto')
 export class newsCrypto {
@@ -23,7 +21,7 @@ export class newsCrypto {
   @Column()
   source!: string;
 
-  @Column({ type: 'bigint' })
+  @Column({ type: 'bigint', default: 0 })
   timestamp!: number;
 
   @Column({ default: false })
