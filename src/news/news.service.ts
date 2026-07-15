@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { Injectable, NotFoundException, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -8,109 +8,127 @@ import { GetNewsDto } from './dto/get-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 
 @Injectable()
-export class NewsService implements OnModuleInit {
+export class NewsService implements OnApplicationBootstrap {
   constructor(
     @InjectRepository(newsCrypto)
     private readonly newsRepository: Repository<newsCrypto>,
   ) {}
 
-  async onModuleInit() {
+  // ========== تابع کمکی برای دریافت پیام خطا ==========
+  private getErrorMessage(error: unknown): string {
+    if (error instanceof Error) {
+      return error.message;
+    }
+    return String(error);
+  }
+
+  // ========== اجرا بعد از اتصال کامل دیتابیس ==========
+  async onApplicationBootstrap() {
     await this.seedInitialData();
   }
 
-  private async seedInitialData() {
-    const count = await this.newsRepository.count();
+  // ========== Seed با بازنویسی داده‌های نامعتبر ==========
+  public async seedInitialData() {
+    try {
+      const count = await this.newsRepository.count();
 
-    // اگر داده‌ای وجود دارد، بررسی کنیم که معتبر است یا نه
-    if (count > 0) {
-      const sample = await this.newsRepository.findOne({ where: {} });
-      // اگر نمونه‌ای با عنوان غیرخالی وجود داشته باشد، داده‌ها معتبر هستند
-      if (sample && sample.title && sample.title.trim().length > 0) {
-        console.log('✅ داده‌ها قبلاً در دیتابیس وجود دارند و معتبر هستند.');
-        return;
-      } else {
-        // داده‌ها خالی یا نامعتبر هستند → پاک می‌کنیم
-        console.log('⚠️ داده‌های موجود نامعتبر هستند، پاک کردن و جایگزینی...');
-        await this.newsRepository.clear();
+      // بررسی وجود داده‌های معتبر
+      if (count > 0) {
+        const sample = await this.newsRepository.findOne({ where: {} });
+        if (sample && sample.title && sample.title.trim().length > 0) {
+          console.log('✅ داده‌ها معتبر هستند. تعداد:', count);
+          return;
+        } else {
+          console.log('⚠️ داده‌های موجود نامعتبر هستند. پاک کردن و جایگزینی...');
+          await this.newsRepository.clear();
+          console.log('✅ جدول خالی شد.');
+        }
       }
+
+      // ۷ خبر متنوع
+      const initialNews = [
+        {
+          title: 'بیت‌کوین از مرز ۷۲,۰۰۰ دلار عبور کرد؛ ورود نهادی‌ها به اوج رسید',
+          summary: 'بیت‌کوین با شکستن مقاومت ۷۲,۰۰۰ دلاری، تحت تأثیر رکوردشکنی ورود سرمایه‌های نهادی به صندوق‌های ETF و افزایش پذیرش در میان مؤسسات مالی سنتی قرار گرفت.',
+          category: 'bitcoin',
+          source: 'کویندسک',
+          timestamp: Date.now() - 1000 * 60 * 15,
+          trending: true,
+          url: '#',
+        },
+        {
+          title: 'افزایش بی‌سابقه فعالیت در لایه‌۲ اتریوم؛ آربیتروم و آپتیمیسم رکورد زدند',
+          summary: 'تعداد آدرس‌های فعال روزانه در شبکه‌های لایه‌۲ اتریوم به بالاترین سطح خود رسیده و آربیتروم پیشتاز است. کارمزد تراکنش‌ها همچنان پایین مانده و فعالیت دی‌فای را افزایش داده است.',
+          category: 'ethereum',
+          source: 'بلاک',
+          timestamp: Date.now() - 1000 * 60 * 45,
+          trending: true,
+          url: '#',
+        },
+        {
+          title: 'تصویب قوانین جدید نگهداری رمزارز توسط SEC؛ گامی بزرگ برای نهادهای مالی',
+          summary: 'کمیسیون بورس و اوراق بهادار آمریکا قوانین نهایی نگهداری از دارایی‌های دیجیتال را تصویب کرد که به عنوان سیگنالی صعودی برای محصولات رمزارزی تحت نظارت تلقی می‌شود.',
+          category: 'regulation',
+          source: 'بلومبرگ کریپتو',
+          timestamp: Date.now() - 1000 * 60 * 120,
+          trending: false,
+          url: '#',
+        },
+        {
+          title: 'بازار NFT نشانه‌های بهبود را نشان می‌دهد؛ کلکسیون‌های شاخص ۴۰٪ رشد کردند',
+          summary: 'پس از یک بازار نزولی طولانی، فضای NFT با بازگشت علاقه مواجه شده و کلکسیون‌هایی مثل Bored Ape Yacht Club و CryptoPunks رشد دو رقمی ثبت کرده‌اند.',
+          category: 'nft',
+          source: 'دکریپت',
+          timestamp: Date.now() - 1000 * 60 * 180,
+          trending: false,
+          url: '#',
+        },
+        {
+          title: 'ارزش کل قفل‌شده در پروتکل‌های دی‌فای از ۱۰۰ میلیارد دلار عبور کرد',
+          summary: 'مجموع ارزش قفل‌شده در پروتکل‌های مالی غیرمتمرکز برای اولین بار پس از ۲۰۲۲ از مرز ۱۰۰ میلیارد دلار گذشت که ناشی از بازگشت فرصت‌های سوددهی و مشتقات نقدشوندگی جدید است.',
+          category: 'defi',
+          source: 'دی‌فای‌لاما',
+          timestamp: Date.now() - 1000 * 60 * 240,
+          trending: true,
+          url: '#',
+        },
+        {
+          title: 'هنگ‌کنگ چارچوب جدید صدور مجوز برای صرافی‌های رمزارزی اعلام کرد',
+          summary: 'کمیسیون اوراق بهادار و آتی هنگ‌کنگ رژیم جامع صدور مجوز برای پلتفرم‌های معاملاتی دارایی‌های مجازی را رونمایی کرد و این شهر را به قطب پیشرو رمزارز در آسیا تبدیل می‌کند.',
+          category: 'regulation',
+          source: 'ساوت چاینا مورنینگ پست',
+          timestamp: Date.now() - 1000 * 60 * 300,
+          trending: false,
+          url: '#',
+        },
+        {
+          title: 'سولانا با رشد ۲۵٪ هفتگی از سایر ارزهای بزرگ پیشی گرفت',
+          summary: 'سولانا این هفته به عنوان بهترین ارز دیجیتال بزرگ از نظر عملکرد ظاهر شده که ناشی از رشد اکوسیستم و افزایش معاملات میم‌کوین در این شبکه است.',
+          category: 'general',
+          source: 'کویین‌تلگراف',
+          timestamp: Date.now() - 1000 * 60 * 420,
+          trending: false,
+          url: '#',
+        },
+      ];
+
+      // درج داده‌ها
+      for (const news of initialNews) {
+        const entity = this.newsRepository.create(news as any);
+        await this.newsRepository.save(entity);
+      }
+
+      const newCount = await this.newsRepository.count();
+      console.log(`✅ Seed با موفقیت انجام شد. ${newCount} خبر درج شد.`);
+    } catch (error) {
+      // ✅ استفاده از تابع کمکی برای دریافت پیام خطا
+      console.error('❌ خطا در Seed:', this.getErrorMessage(error));
+      throw error;
     }
-
-    // ۷ خبر کاملاً متنوع (بدون تکرار)
-    const initialNews = [
-      {
-        title: 'بیت‌کوین از مرز ۷۲,۰۰۰ دلار عبور کرد؛ ورود نهادی‌ها به اوج رسید',
-        summary: 'بیت‌کوین با شکستن مقاومت ۷۲,۰۰۰ دلاری، تحت تأثیر رکوردشکنی ورود سرمایه‌های نهادی به صندوق‌های ETF و افزایش پذیرش در میان مؤسسات مالی سنتی قرار گرفت.',
-        category: 'bitcoin',
-        source: 'کویندسک',
-        timestamp: Date.now() - 1000 * 60 * 15,
-        trending: true,
-        url: '#',
-      },
-      {
-        title: 'افزایش بی‌سابقه فعالیت در لایه‌۲ اتریوم؛ آربیتروم و آپتیمیسم رکورد زدند',
-        summary: 'تعداد آدرس‌های فعال روزانه در شبکه‌های لایه‌۲ اتریوم به بالاترین سطح خود رسیده و آربیتروم پیشتاز است. کارمزد تراکنش‌ها همچنان پایین مانده و فعالیت دی‌فای را افزایش داده است.',
-        category: 'ethereum',
-        source: 'بلاک',
-        timestamp: Date.now() - 1000 * 60 * 45,
-        trending: true,
-        url: '#',
-      },
-      {
-        title: 'تصویب قوانین جدید نگهداری رمزارز توسط SEC؛ گامی بزرگ برای نهادهای مالی',
-        summary: 'کمیسیون بورس و اوراق بهادار آمریکا قوانین نهایی نگهداری از دارایی‌های دیجیتال را تصویب کرد که به عنوان سیگنالی صعودی برای محصولات رمزارزی تحت نظارت تلقی می‌شود.',
-        category: 'regulation',
-        source: 'بلومبرگ کریپتو',
-        timestamp: Date.now() - 1000 * 60 * 120,
-        trending: false,
-        url: '#',
-      },
-      {
-        title: 'بازار NFT نشانه‌های بهبود را نشان می‌دهد؛ کلکسیون‌های شاخص ۴۰٪ رشد کردند',
-        summary: 'پس از یک بازار نزولی طولانی، فضای NFT با بازگشت علاقه مواجه شده و کلکسیون‌هایی مثل Bored Ape Yacht Club و CryptoPunks رشد دو رقمی ثبت کرده‌اند.',
-        category: 'nft',
-        source: 'دکریپت',
-        timestamp: Date.now() - 1000 * 60 * 180,
-        trending: false,
-        url: '#',
-      },
-      {
-        title: 'ارزش کل قفل‌شده در پروتکل‌های دی‌فای از ۱۰۰ میلیارد دلار عبور کرد',
-        summary: 'مجموع ارزش قفل‌شده در پروتکل‌های مالی غیرمتمرکز برای اولین بار پس از ۲۰۲۲ از مرز ۱۰۰ میلیارد دلار گذشت که ناشی از بازگشت فرصت‌های سوددهی و مشتقات نقدشوندگی جدید است.',
-        category: 'defi',
-        source: 'دی‌فای‌لاما',
-        timestamp: Date.now() - 1000 * 60 * 240,
-        trending: true,
-        url: '#',
-      },
-      {
-        title: 'هنگ‌کنگ چارچوب جدید صدور مجوز برای صرافی‌های رمزارزی اعلام کرد',
-        summary: 'کمیسیون اوراق بهادار و آتی هنگ‌کنگ رژیم جامع صدور مجوز برای پلتفرم‌های معاملاتی دارایی‌های مجازی را رونمایی کرد و این شهر را به قطب پیشرو رمزارز در آسیا تبدیل می‌کند.',
-        category: 'regulation',
-        source: 'ساوت چاینا مورنینگ پست',
-        timestamp: Date.now() - 1000 * 60 * 300,
-        trending: false,
-        url: '#',
-      },
-      {
-        title: 'سولانا با رشد ۲۵٪ هفتگی از سایر ارزهای بزرگ پیشی گرفت',
-        summary: 'سولانا این هفته به عنوان بهترین ارز دیجیتال بزرگ از نظر عملکرد ظاهر شده که ناشی از رشد اکوسیستم و افزایش معاملات میم‌کوین در این شبکه است.',
-        category: 'general',
-        source: 'کویین‌تلگراف',
-        timestamp: Date.now() - 1000 * 60 * 420,
-        trending: false,
-        url: '#',
-      },
-    ];
-
-    for (const news of initialNews) {
-      const entity = this.newsRepository.create(news as any);
-      await this.newsRepository.save(entity);
-    }
-
-    console.log('✅ داده‌های اولیه خبر با موفقیت در دیتابیس ذخیره شدند.');
   }
 
-  // ==================== متدهای CRUD (بدون تغییر) ====================
+  // ==================== متدهای CRUD ====================
+
   async create(createNewsDto: CreateNewsDto): Promise<newsCrypto> {
     const news = this.newsRepository.create(createNewsDto);
     return this.newsRepository.save(news);
