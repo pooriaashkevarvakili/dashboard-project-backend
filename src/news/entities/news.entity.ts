@@ -6,8 +6,8 @@ import {
 } from 'typeorm';
 import { NewsCategory } from '../news.enum';
 
-@Entity('news')
-export class NewsEntity {
+@Entity('newsCrypto')
+export class newsCrypto {
   @PrimaryGeneratedColumn('increment')
   id!: number;
 
