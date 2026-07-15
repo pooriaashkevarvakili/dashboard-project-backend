@@ -14,16 +14,25 @@ export class NewsService implements OnModuleInit {
     private readonly newsRepository: Repository<newsCrypto>,
   ) {}
 
-  // ==================== Seed خودکار هنگام راه‌اندازی ====================
   async onModuleInit() {
     await this.seedInitialData();
   }
 
   private async seedInitialData() {
     const count = await this.newsRepository.count();
+
+    // اگر داده‌ای وجود دارد، بررسی کنیم که معتبر است یا نه
     if (count > 0) {
-      console.log('✅ داده‌ها قبلاً در دیتابیس وجود دارند.');
-      return;
+      const sample = await this.newsRepository.findOne({ where: {} });
+      // اگر نمونه‌ای با عنوان غیرخالی وجود داشته باشد، داده‌ها معتبر هستند
+      if (sample && sample.title && sample.title.trim().length > 0) {
+        console.log('✅ داده‌ها قبلاً در دیتابیس وجود دارند و معتبر هستند.');
+        return;
+      } else {
+        // داده‌ها خالی یا نامعتبر هستند → پاک می‌کنیم
+        console.log('⚠️ داده‌های موجود نامعتبر هستند، پاک کردن و جایگزینی...');
+        await this.newsRepository.clear();
+      }
     }
 
     // ۷ خبر کاملاً متنوع (بدون تکرار)
@@ -101,8 +110,7 @@ export class NewsService implements OnModuleInit {
     console.log('✅ داده‌های اولیه خبر با موفقیت در دیتابیس ذخیره شدند.');
   }
 
-  // ==================== متدهای اصلی CRUD ====================
-
+  // ==================== متدهای CRUD (بدون تغییر) ====================
   async create(createNewsDto: CreateNewsDto): Promise<newsCrypto> {
     const news = this.newsRepository.create(createNewsDto);
     return this.newsRepository.save(news);
@@ -160,7 +168,6 @@ export class NewsService implements OnModuleInit {
     };
   }
 
-  // (اختیاری) دریافت اخبار داغ
   async findTrending(limit: number = 5): Promise<newsCrypto[]> {
     return this.newsRepository.find({
       where: { trending: true },
