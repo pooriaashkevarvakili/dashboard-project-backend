@@ -20,6 +20,10 @@ import { newsCrypto } from './entities/news.entity';
 export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
+  // ================================================================
+  //  مسیرهای ثابت (ابتدا تعریف شوند تا با :id اشتباه نشوند)
+  // ================================================================
+
   @Post()
   create(@Body() createNewsDto: CreateNewsDto) {
     return this.newsService.create(createNewsDto);
@@ -36,25 +40,6 @@ export class NewsController {
     return { count };
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.newsService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateNewsDto: UpdateNewsDto,
-  ) {
-    return this.newsService.update(id, updateNewsDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.newsService.remove(id);
-  }
-
-  // ========== ریست کامل دیتابیس (پاک کردن و Seed مجدد) ==========
   @Post('reset')
   async resetAndSeed() {
     try {
@@ -168,5 +153,27 @@ export class NewsController {
       message: 'Seed executed successfully',
       timestamp: new Date().toISOString(),
     };
+  }
+
+  // ================================================================
+  //  مسیرهای پارامتری (بعد از مسیرهای ثابت)
+  // ================================================================
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.newsService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateNewsDto: UpdateNewsDto,
+  ) {
+    return this.newsService.update(id, updateNewsDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.newsService.remove(id);
   }
 }
