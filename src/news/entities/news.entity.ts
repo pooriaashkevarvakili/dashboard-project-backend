@@ -1,24 +1,20 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('newsCrypto')
 export class newsCrypto {
   @PrimaryGeneratedColumn()
   id!: number;
 
-@Column({ default: 'بدون عنوان' })
-title!: string;
+  @Column({ default: '' })
+  title!: string;
 
-  @Column()
+  @Column({ default: '' })
   summary!: string;
 
-  @Column()
+  @Column({ default: '' })
   category!: string;
 
-  @Column()
+  @Column({ default: '' })
   source!: string;
 
   @Column({ type: 'bigint', default: 0 })
@@ -27,6 +23,6 @@ title!: string;
   @Column({ default: false })
   trending!: boolean;
 
-  @Column()
+  @Column({ default: '' })
   url!: string;
 }
