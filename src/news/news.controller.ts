@@ -14,30 +14,33 @@ import { NewsService } from './news.service';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { GetNewsDto } from './dto/get-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
+import { newsCrypto } from './entities/news.entity'; // ✅ اضافه کردن import Entity
 
 @Controller('news')
 export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
-  // ========== ایجاد خبر جدید ==========
   @Post()
   create(@Body() createNewsDto: CreateNewsDto) {
     return this.newsService.create(createNewsDto);
   }
 
-  // ========== دریافت لیست اخبار با فیلتر و صفحه‌بندی ==========
   @Get()
   findAll(@Query() query: GetNewsDto) {
     return this.newsService.findAll(query);
   }
 
-  // ========== دریافت یک خبر با شناسه ==========
+  @Get('count')
+  async count() {
+    const count = await this.newsService.getCount();
+    return { count };
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.newsService.findOne(id);
   }
 
-  // ========== به‌روزرسانی خبر ==========
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -46,16 +49,17 @@ export class NewsController {
     return this.newsService.update(id, updateNewsDto);
   }
 
-  // ========== حذف خبر ==========
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.newsService.remove(id);
   }
 
-  // ========== (جدید) درج اجباری داده‌ها ==========
+  // ========== Force Seed با لاگ کامل ==========
   @Post('force-seed')
   async forceSeed() {
     try {
+      console.log('🚀 Force seed started...');
+
       // ۷ خبر کامل
       const initialNews = [
         {
@@ -123,32 +127,52 @@ export class NewsController {
         },
       ];
 
-      const results: any[] = []; // ✅ نوع‌دهی صریح برای جلوگیری از خطای never
+      console.log(`📝 ${initialNews.length} خبر آماده درج است.`);
 
-      // استفاده از `as any` برای دسترسی به repository (راه‌حل سریع)
+      // دسترسی به repository
       const repository = (this.newsService as any).newsRepository;
-
-      for (const news of initialNews) {
-        const entity = repository.create(news);
-        const saved = await repository.save(entity);
-        results.push(saved);
+      if (!repository) {
+        throw new Error('newsRepository در دسترس نیست!');
       }
+
+      // درج داده‌ها یکی‌یکی
+      const results: newsCrypto[] = []; // ✅ نوع‌دهی صریح با Entity
+
+      for (let i = 0; i < initialNews.length; i++) {
+        const news = initialNews[i];
+        console.log(`🔄 در حال درج خبر ${i + 1}:`, news.title);
+        try {
+          const entity = repository.create(news);
+          const saved = await repository.save(entity);
+          results.push(saved);
+          console.log(`✅ خبر ${i + 1} با id ${saved.id} ذخیره شد.`);
+        } catch (singleError) {
+          console.error(`❌ خطا در خبر ${i + 1}:`, singleError);
+          // ادامه بده تا بقیه خبر‌ها هم درج شوند
+        }
+      }
+
+      // بررسی نهایی
+      const finalCount = await repository.count();
+      console.log(`📊 تعداد نهایی رکوردها: ${finalCount}`);
 
       return {
         message: `${results.length} خبر با موفقیت درج شد.`,
+        totalInDatabase: finalCount,
         data: results,
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
-      // ✅ مدیریت خطای unknown
       const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('❌ خطای کلی در force-seed:', errorMessage);
       return {
         message: 'خطا در درج داده‌ها',
         error: errorMessage,
+        timestamp: new Date().toISOString(),
       };
     }
   }
 
-  // ========== Seed معمولی (با استفاده از سرویس) ==========
   @Post('seed')
   async seed() {
     await this.newsService.seedInitialData();

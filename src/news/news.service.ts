@@ -130,9 +130,9 @@ export class NewsService implements OnApplicationBootstrap {
   }
 
   // ====== شمارش رکوردها ======
-  async getCount(): Promise<number> {
-    return this.newsRepository.count();
-  }
+ async getCount(): Promise<number> {
+  return this.newsRepository.count();
+}
 
   // ==================== متدهای CRUD ====================
 
@@ -200,4 +200,5 @@ export class NewsService implements OnApplicationBootstrap {
       take: limit,
     });
   }
+  
 }
