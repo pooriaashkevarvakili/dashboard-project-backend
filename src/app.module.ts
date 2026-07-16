@@ -25,7 +25,7 @@ import { SpotAssetsModule } from './spot-assets/spot-assets.module';
 import { FuturesAssetstableModule } from './futures-assetstable/futures-assetstable.module';
 import { MarginAssetTableModule } from './margin-asset-table/margin-asset-table.module';
 import { ExternalWalletstableModule } from './external-walletstable/external-walletstable.module';
-import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { FilterTransactionModule } from './filter-transaction/filter-transaction.module';
 import { CryptoTablesModule } from './crypto-tables/crypto-tables.module';
 import { CryptomarketModule } from './cryptomarket/cryptomarket.module';
@@ -33,6 +33,7 @@ import { ChartQueryController } from './chart-query/chart-query.controller';
 import { ExchangesModule } from './exchanges/exchanges.module';
 import { HistoricalModule } from './historical/historical.module';
 import { CryptoNewsModule } from './news-crypto/news-crypto.module';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -55,7 +56,7 @@ import { CryptoNewsModule } from './news-crypto/news-crypto.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-   url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
+  url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
         type: 'postgres',
         host: config.get<string>('DB_HOST'),
         port: Number(config.get<string>('DB_PORT')),
@@ -133,6 +134,13 @@ import { CryptoNewsModule } from './news-crypto/news-crypto.module';
   ],
 
   controllers: [AppController, NotesController, ChartQueryController],
-  providers: [AppService, NotesService],
+ providers: [
+  AppService,
+  NotesService,
+  {
+    provide: APP_GUARD,
+    useClass: ThrottlerGuard,
+  },
+],
 })
 export class AppModule {}
