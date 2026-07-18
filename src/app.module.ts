@@ -34,6 +34,7 @@ import { ExchangesModule } from './exchanges/exchanges.module';
 import { HistoricalModule } from './historical/historical.module';
 import { CryptoNewsModule } from './news-crypto/news-crypto.module';
 import { APP_GUARD } from '@nestjs/core';
+import { CalendarCryptoModule } from './calendar-crypto/calendar-crypto.module';
 
 @Module({
   imports: [
@@ -131,6 +132,9 @@ import { APP_GUARD } from '@nestjs/core';
 
     
     CryptoNewsModule,
+
+    
+    CalendarCryptoModule,
   ],
 
   controllers: [AppController, NotesController, ChartQueryController],
