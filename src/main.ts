@@ -10,9 +10,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // =========================
-  // SECURITY (Helmet)
-  // =========================
+
   app.use(
     helmet({
       contentSecurityPolicy: false,
@@ -20,9 +18,6 @@ async function bootstrap() {
     }),
   );
 
-  // =========================
-  // GLOBAL VALIDATION
-  // =========================
   app.useGlobalPipes(
     new ValidationPipe({
      whitelist: true,
@@ -31,35 +26,25 @@ async function bootstrap() {
     }),
   );
 
-  // =========================
-  // LOGGER
-  // =========================
+
   app.useLogger(app.get(Logger));
 
-  // =========================
-  // GLOBAL PREFIX
-  // =========================
+
   app.setGlobalPrefix('api/v1');
 
-  // =========================
-  // CORS (IMPORTANT FIXED)
-  // =========================
+
  app.enableCors({
   origin: [
     'http://localhost:5173',
-    'https://dashboard-project-front-iaw7dlnzq-pooriavakilis-projects.vercel.app',
+    'https://dashboard-project-front-9fw4sohbv-pooriavakilis-projects.vercel.app',
   ],
   credentials: true,
 });
 
-  // =========================
-  // STATIC FILES (FIXED)
-  // =========================
+
   app.useStaticAssets(join(process.cwd(), 'public'));
 
-  // =========================
-  // SWAGGER
-  // =========================
+
   const config = new DocumentBuilder()
     .setTitle('Project Dashboard Backend')
     .setDescription('API Documentation')

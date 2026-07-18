@@ -49,10 +49,9 @@ import { CalendarCryptoModule } from './calendar-crypto/calendar-crypto.module';
         limit: 6,
       },
     ]),
-    // JWT
+  
     JwtModule.registerAsync(jwtConfig.asProvider()),
 
-    // DB
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
