@@ -35,6 +35,9 @@ import { HistoricalModule } from './historical/historical.module';
 import { CryptoNewsModule } from './news-crypto/news-crypto.module';
 import { APP_GUARD } from '@nestjs/core';
 import { CalendarCryptoModule } from './calendar-crypto/calendar-crypto.module';
+import { ChartAlertController } from './chart-alert/chart-alert.controller';
+import { ChartAlertService } from './chart-alert/chart-alert.service';
+import { ChartAlertModule } from './chart-alert/chart-alert.module';
 
 @Module({
   imports: [
@@ -49,14 +52,14 @@ import { CalendarCryptoModule } from './calendar-crypto/calendar-crypto.module';
         limit: 6,
       },
     ]),
-  
+
     JwtModule.registerAsync(jwtConfig.asProvider()),
 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
- url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
+        url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
         type: 'postgres',
         host: config.get<string>('DB_HOST'),
         port: Number(config.get<string>('DB_PORT')),
@@ -112,7 +115,7 @@ import { CalendarCryptoModule } from './calendar-crypto/calendar-crypto.module';
     OrderBookModule,
 
     SpotAssetsModule,
-
+    ChartAlertModule,
     FuturesAssetstableModule,
 
     MarginAssetTableModule,
@@ -129,21 +132,27 @@ import { CalendarCryptoModule } from './calendar-crypto/calendar-crypto.module';
 
     HistoricalModule,
 
-    
     CryptoNewsModule,
 
-    
     CalendarCryptoModule,
+
+    ChartAlertModule,
   ],
 
-  controllers: [AppController, NotesController, ChartQueryController],
- providers: [
-  AppService,
-  NotesService,
-  {
-    provide: APP_GUARD,
-    useClass: ThrottlerGuard,
-  },
-],
+  controllers: [
+    AppController,
+    NotesController,
+    ChartQueryController,
+    ChartAlertController,
+  ],
+  providers: [
+    AppService,
+    NotesService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+    ChartAlertService,
+  ],
 })
 export class AppModule {}
