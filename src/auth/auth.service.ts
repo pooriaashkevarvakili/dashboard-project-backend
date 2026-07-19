@@ -80,7 +80,6 @@ export class AuthService {
   });
 
   return {
-  message: 'Login successful',
   accessToken,
   user: {
     id: user.id,
