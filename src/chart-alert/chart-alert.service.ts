@@ -9,8 +9,26 @@ export class ChartAlertService {
      getChart(symbol: string) {
     return generateSampleData(symbol);
   }
-  getAlerts() {
-    return this.alerts;
+    private getIndicatorIcon(indicator: string) {
+    switch (indicator) {
+      case 'Price':
+        return '💲';
+      case 'Volume':
+        return '📊';
+      case 'RSI':
+        return '📉';
+      case 'MACD':
+        return '📈';
+      default:
+        return '🔔';
+    }
+  }
+
+    getAlerts() {
+    return this.alerts.map(alert => ({
+      ...alert,
+      icon: this.getIndicatorIcon(alert.indicator),
+    }));
   }
 
   createAlert(dto: CreateAlertDto) {
