@@ -31,9 +31,9 @@ import chartSeriesCanslick from './data/ChartSeriesCanslick.json'
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('image/codekhane')
+  @Get('image/crypto')
   getImagepooria(@Res() res: Response) {
-    return res.sendFile(join(process.cwd(), 'public', 'codekhane.jpeg'));
+    return res.sendFile(join(process.cwd(), 'public', 'crypto.png'));
   }
  
 
