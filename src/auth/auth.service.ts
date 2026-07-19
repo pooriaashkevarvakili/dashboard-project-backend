@@ -46,10 +46,6 @@ export class AuthService {
     });
 
     await this.userRepository.save(user);
-
-    return {
-      message: 'User created successfully',
-    };
   }
 
   async signin(signinDto: SiginninDto) {
