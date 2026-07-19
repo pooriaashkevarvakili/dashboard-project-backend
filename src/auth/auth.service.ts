@@ -48,7 +48,6 @@ export class AuthService {
     await this.userRepository.save(user);
 
     return {
-      statusCode: 201,
       message: 'User created successfully',
     };
   }
@@ -81,7 +80,6 @@ export class AuthService {
   });
 
   return {
-  statusCode: 200,
   message: 'Login successful',
   accessToken,
   user: {
