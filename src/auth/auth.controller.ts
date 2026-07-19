@@ -5,7 +5,7 @@ import { SiginninDto } from './dto/signin.dto';
 import { Auth } from './decorator/auth.decortor';
 import { AuthType } from './enum/auth-type';
 import type { Response } from 'express';
-import { SkipThrottle, Throttle } from '@nestjs/throttler';
+import {  Throttle } from '@nestjs/throttler';
 
 
 @Auth(AuthType.None)
@@ -43,8 +43,7 @@ async signin(
   });
 
   return {
-    statusCode: 200,
-    message: 'Login successful',
+
     accessToken: result.accessToken,
     user: result.user,
   };
