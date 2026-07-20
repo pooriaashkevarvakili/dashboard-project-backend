@@ -38,6 +38,7 @@ import { CalendarCryptoModule } from './calendar-crypto/calendar-crypto.module';
 import { ChartAlertController } from './chart-alert/chart-alert.controller';
 import { ChartAlertService } from './chart-alert/chart-alert.service';
 import { ChartAlertModule } from './chart-alert/chart-alert.module';
+import { TranactionsTableModule } from './tranactions-table/tranactions-table.module';
 
 @Module({
   imports: [
@@ -59,7 +60,7 @@ import { ChartAlertModule } from './chart-alert/chart-alert.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-       url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
+       //url:'postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z',
         type: 'postgres',
         host: config.get<string>('DB_HOST'),
         port: Number(config.get<string>('DB_PORT')),
@@ -137,6 +138,8 @@ import { ChartAlertModule } from './chart-alert/chart-alert.module';
     CalendarCryptoModule,
 
     ChartAlertModule,
+
+    TranactionsTableModule,
   ],
 
   controllers: [
