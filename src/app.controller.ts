@@ -26,6 +26,7 @@ import ReactionData from './data/ReactionData.json'
 import currencyExchange from './data/CurrencyExchange.json'
 import chartSeriesCanslick from './data/ChartSeriesCanslick.json'
 import month from './data/month.json'
+import metrics from './data/metrics.json'
 
 @Controller()
 export class AppController {
@@ -35,7 +36,10 @@ export class AppController {
   getImagepooria(@Res() res: Response) {
     return res.sendFile(join(process.cwd(), 'public', 'crypto.png'));
   }
- 
+  @Get('metrics')
+  metrics(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(metrics);
+  }
 
   @Get('transactions')
   application(@Res() res: Response): void {

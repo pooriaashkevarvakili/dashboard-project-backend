@@ -1,0 +1,37 @@
+
+{
+  "message": "پیام با موفقیت انجام شد",
+  "data": [
+    {
+      "title": "نوسان",
+      "value": "±12.4%",
+      "className": "text-gray-900"
+    },
+    {
+      "title": "حداکثر افت",
+      "value": "-8.7%",
+      "className": "text-red-600"
+    },
+    {
+      "title": "نسبت شارپ",
+      "value": "1.84",
+      "className": "text-indigo-600"
+    },
+    {
+      "title": "نرخ برد",
+      "value": "68%",
+      "className": "text-amber-600"
+    },
+    {
+      "title": "سود خالص",
+      "value": "+24.6%",
+      "className": "text-green-600"
+    },
+    {
+      "title": "تعداد معاملات",
+      "value": "142",
+      "className": "text-blue-600"
+    }
+  ]
+}
+
