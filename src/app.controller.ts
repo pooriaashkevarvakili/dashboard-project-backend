@@ -25,7 +25,7 @@ import holdersTabAddress from './data/holdersTabAddress.json'
 import ReactionData from './data/ReactionData.json'
 import currencyExchange from './data/CurrencyExchange.json'
 import chartSeriesCanslick from './data/ChartSeriesCanslick.json'
-
+import month from './data/month.json'
 
 @Controller()
 export class AppController {
@@ -40,6 +40,10 @@ export class AppController {
   @Get('transactions')
   application(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(transactions);
+  }
+    @Get('month')
+  month(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(month);
   }
     @Get('reactionData')
   reactionData(@Res() res: Response): void {
