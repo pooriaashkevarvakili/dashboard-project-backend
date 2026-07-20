@@ -27,7 +27,7 @@ import currencyExchange from './data/CurrencyExchange.json'
 import chartSeriesCanslick from './data/ChartSeriesCanslick.json'
 import month from './data/month.json'
 import metrics from './data/metrics.json'
-
+import alocationData from './data/alocationData.json'
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -40,7 +40,10 @@ export class AppController {
   metrics(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(metrics);
   }
-
+@Get('alocationData')
+  alocationData(@Res() res: Response): void {
+    res.status(HttpStatus.OK).json(alocationData);
+  }
   @Get('transactions')
   application(@Res() res: Response): void {
     res.status(HttpStatus.OK).json(transactions);
