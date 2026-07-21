@@ -39,6 +39,7 @@ import { ChartAlertController } from './chart-alert/chart-alert.controller';
 import { ChartAlertService } from './chart-alert/chart-alert.service';
 import { ChartAlertModule } from './chart-alert/chart-alert.module';
 import { TranactionsTableModule } from './tranactions-table/tranactions-table.module';
+import { TradersModule } from './copy-trade/copy-trade.module';
 
 @Module({
   imports: [
@@ -140,6 +141,8 @@ import { TranactionsTableModule } from './tranactions-table/tranactions-table.mo
     ChartAlertModule,
 
     TranactionsTableModule,
+
+    TradersModule,
   ],
 
   controllers: [
